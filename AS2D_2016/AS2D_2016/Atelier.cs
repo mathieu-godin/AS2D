@@ -13,6 +13,7 @@ namespace AtelierXNA
 {
    public class Atelier : Microsoft.Xna.Framework.Game
    {
+        int allo;
       public const float INTERVALLE_CALCUL_FPS = 1f;
       public const float INTERVALLE_STANDARDS = 1f / 60f;
       GraphicsDeviceManager PériphériqueGraphique { get; set; }
