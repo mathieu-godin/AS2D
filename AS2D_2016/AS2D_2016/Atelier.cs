@@ -18,8 +18,6 @@ namespace AtelierXNA
       GraphicsDeviceManager PériphériqueGraphique { get; set; }
       SpriteBatch GestionSprites { get; set; }
 
-        int boujour = 0;
-
       RessourcesManager<SpriteFont> GestionnaireDeFonts { get; set; }
       RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
 
