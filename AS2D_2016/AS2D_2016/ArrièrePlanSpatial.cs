@@ -1,8 +1,8 @@
 ﻿/* Auteur :            Raphaël Brulé
-   Fichier :           ArrièrePlanDéroulant.cs
-   Date :              le 18 septembre 2016
+   Fichier :           ArrièrePlanSpatial.cs
+   Date :              le 5 octobre 2016
    Description :       Ce DrawableGameComponent permet à l'arrière-plan
-                       de se déplacer.*/
+                       de se déplacer du haut vers le bas, et ce, à répétition.*/
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -48,7 +48,7 @@ namespace AtelierXNA
         public override void Initialize()
         {
             TempsÉcouléDepuisMAJ = 0;
-            ZoneAffichagePremièreImage = new Rectangle(-Game.Window.ClientBounds.Width, 0,
+            ZoneAffichagePremièreImage = new Rectangle(0, -Game.Window.ClientBounds.Height,
                             Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
             ZoneAffichageSecondeImage = new Rectangle(0, 0, 
                             Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
@@ -89,20 +89,20 @@ namespace AtelierXNA
         /// </summary>
         private void GérerImagesDeFond()
         {
-            ZoneAffichagePremièreImage = new Rectangle(ZoneAffichagePremièreImage.X + 1, 0,
+            ZoneAffichagePremièreImage = new Rectangle(0, ZoneAffichagePremièreImage.Y + 1,
                         Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-            ZoneAffichageSecondeImage = new Rectangle(ZoneAffichageSecondeImage.X + 1, 0,
+            ZoneAffichageSecondeImage = new Rectangle(0, ZoneAffichageSecondeImage.Y + 1,
                         Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
 
-            if (ZoneAffichagePremièreImage.X > Game.Window.ClientBounds.Width)
+            if (ZoneAffichagePremièreImage.Y > Game.Window.ClientBounds.Height)
             {
-                ZoneAffichagePremièreImage = new Rectangle(-Game.Window.ClientBounds.Width + 1, 0,
+                ZoneAffichagePremièreImage = new Rectangle(0, -Game.Window.ClientBounds.Height + 1,
                         Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
             }
 
-            if (ZoneAffichageSecondeImage.X > Game.Window.ClientBounds.Width)
+            if (ZoneAffichageSecondeImage.Y > Game.Window.ClientBounds.Height)
             {
-                ZoneAffichageSecondeImage = new Rectangle(-Game.Window.ClientBounds.Width + 1, 0,
+                ZoneAffichageSecondeImage = new Rectangle(0, -Game.Window.ClientBounds.Height + 1,
                         Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
             }
         }
