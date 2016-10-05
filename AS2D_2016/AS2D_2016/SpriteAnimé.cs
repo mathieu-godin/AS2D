@@ -20,12 +20,19 @@ namespace AtelierXNA
     /// </summary>
     public class SpriteAnimé : Sprite
     {
+        //Constantes
         const float AUCUN_DÉPLACEMENT = 0.0F;
         const int ORIGINE = 0;
-        Vector2 Delta { get; set; }
-        Rectangle RectangleSource { get; set; }
+
+        //Propriétés initialement gérées par le constructeur
         Vector2 DescriptionImage { get; set; }
         float IntervalleMAJAnnimation { get; set; }
+
+        //Propriétés initialement gérées par LoadContent
+        Rectangle RectangleSource { get; set; }
+
+        //Propriétés initialement gérées par CalculerMarges
+        Vector2 Delta { get; set; }
         float MargeDroite { get; set; }
         float MargeBas { get; set; }
 
@@ -38,7 +45,9 @@ namespace AtelierXNA
         /// <param name="zoneAffichage">Zone d'affichage du sprite</param>
         /// <param name="descriptionImage">Le nombres de sprites en x et en y contenus dans l'image chargée</param>
         /// <param name="intervalleMAJAnimation">Intervalle de mise à jour de l'animation du sprite</param>
-        public SpriteAnimé(Game game, string nomImage, Vector2 position, Rectangle zoneAffichage, Vector2 descriptionImage, float intervalleMAJAnimation) : base(game, nomImage, position, zoneAffichage)
+        public SpriteAnimé(Game game, string nomImage, Vector2 position, Rectangle zoneAffichage,
+                           Vector2 descriptionImage, float intervalleMAJAnimation) 
+            : base(game, nomImage, position, zoneAffichage)
         {
             DescriptionImage = new Vector2(descriptionImage.X, descriptionImage.Y);
             IntervalleMAJAnnimation = intervalleMAJAnimation;
