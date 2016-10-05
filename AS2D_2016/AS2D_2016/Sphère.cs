@@ -21,7 +21,7 @@ namespace AtelierXNA
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class Sphère : SpriteAnimé
+    public class Sphère //: SpriteAnimé
     {
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
