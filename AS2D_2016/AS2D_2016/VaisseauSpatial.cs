@@ -22,10 +22,17 @@ namespace AtelierXNA
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class VaisseauSpatial //: SpriteAnimé
+    public class VaisseauSpatial : SpriteAnimé
     {
+        //Constante
+        const int SE_DÉPLACE = 1;
+
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
+
+        int DeltaX { get; set; }
+        int DeltaY { get; set; }
+        InputManager GestionInput { get; set; }
 
         /// <summary>
         /// Constructeur de VaisseauSpatial
@@ -47,15 +54,12 @@ namespace AtelierXNA
             IntervalleMAJDéplacement = intervalleMAJDéplacement;
         }
 
-        /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
-        /// </summary>
-        public override void Initialize()
+        protected override void LoadContent()
         {
-            // TODO: Add your initialization code here
+            base.LoadContent();
 
-            base.Initialize();
+            GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
+
         }
 
         /// <summary>
