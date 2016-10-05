@@ -1,4 +1,15 @@
+/*
+Sprite.cs
+---------
 
+Par Mathieu Godin
+
+Rôle : Composant qui est un DrawableGameComponent et
+       hérite de ICollisionnable, permet d'afficher
+       un sprite à l'écran par le biais d'un Texture2D
+
+Créé : 5 octobre 2016
+*/
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -31,6 +42,10 @@ namespace AtelierXNA
         public override void Draw(GameTime gameTime)
         {
             GestionSprites.Draw(Image, Position, Color.White);
+        }
+        public bool EstEnCollision(object autreObjet)
+        {
+            //À implémenter
         }
     }
 }
