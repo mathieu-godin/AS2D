@@ -22,7 +22,7 @@ namespace AtelierXNA
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class VaisseauSpatial : SpriteAnimé
+    public class VaisseauSpatial //: SpriteAnimé
     {
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
