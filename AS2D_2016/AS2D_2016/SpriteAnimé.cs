@@ -32,7 +32,7 @@ namespace AtelierXNA
         Rectangle RectangleSource { get; set; }
 
         //Propriétés initialement gérées par CalculerMarges
-        Vector2 Delta { get; set; }
+        protected Vector2 Delta { get; set; }
         float MargeDroite { get; set; }
         float MargeBas { get; set; }
 
