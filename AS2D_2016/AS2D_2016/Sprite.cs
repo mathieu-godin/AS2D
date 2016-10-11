@@ -10,7 +10,7 @@ Rôle : Composant qui est un DrawableGameComponent et
 
 Créé : 5 octobre 2016
 */
-using Microsoft.Xna.Framework;
+/*using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -52,3 +52,4 @@ namespace AtelierXNA
         }
     }
 }
+*/

@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Media;
 
 //CLASSE TRÈS IMCOMPLÈTE!!
 
-namespace AtelierXNA
+/*namespace AtelierXNA
 {
     /// <summary>
     /// This is a game component that implements IUpdateable.
@@ -68,3 +68,4 @@ namespace AtelierXNA
         }
     }
 }
+*/

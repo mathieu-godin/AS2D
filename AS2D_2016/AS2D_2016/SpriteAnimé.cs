@@ -11,7 +11,7 @@ Rôle : Composant qui hérite de Sprite et qui
 
 Créé : 5 octobre 2016
 */
-using Microsoft.Xna.Framework;
+/*using Microsoft.Xna.Framework;
 
 namespace AtelierXNA
 {
@@ -89,4 +89,4 @@ namespace AtelierXNA
             GestionSprites.Draw(Image, Position, RectangleSource, Color.White);
         }
     }
-}
+}*/

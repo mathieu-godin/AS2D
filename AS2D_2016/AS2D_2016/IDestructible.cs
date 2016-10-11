@@ -8,6 +8,6 @@ namespace AtelierXNA
     interface IDestructible
     {
         //À implanter
-        bool ÀDétruire { get; }
+        bool ADétruire { get; }
     }
 }

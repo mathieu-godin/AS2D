@@ -10,7 +10,7 @@ Rôle : Composant qui hérite de SpriteAnimé
 
 Créé : 5 octobre 2016
 */
-using System;
+/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -77,4 +77,4 @@ namespace AS2D_2016
             base.Update(gameTime);
         }
     }
-}
+}*/
