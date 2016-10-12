@@ -10,6 +10,8 @@ Rôle : Composant qui hérite de Sprite et qui
        dans la même image chargée
 
 Créé : 5 octobre 2016
+Modifié : 12 octobre 2016
+Description : Très grandes modifications pour EstEnCollision pour faire ÀDétruire et autres
 */
 using Microsoft.Xna.Framework;
 
@@ -35,13 +37,6 @@ namespace AtelierXNA
         int Rangé { get; set; }
         int VariableÀChangerDeNom { get; set; }
 
-        //Propriétés initialement gérées par CalculerMarges
-        protected Vector2 Delta { get; set; }
-        protected int MargeDroite { get; set; }
-        protected int MargeBas { get; set; }
-        protected int MargeGauche { get; set; }
-        protected int MargeHaut { get; set; }
-
         /// <summary>
         /// Constructeur de la classe SpriteAnimé
         /// </summary>
@@ -65,29 +60,9 @@ namespace AtelierXNA
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             ÀDétruire = false;
             TempsÉcouléDepuisMAJ = 0;
-            Rangé = 0;
-            MargeHaut = 0;
-            MargeGauche = 0;
-            base.Initialize();
-        }
-
-        /// <summary>
-        /// Méthode de chargement de contenu nécessaire au SpriteAnimé
-        /// </summary>
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-            CalculerMarges();
-        }
-
-        /// <summary>
-        /// Calcule les marges du sprite
-        /// </summary>
-        protected void CalculerMarges()
-        {
+            //Rangé = 0;
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
-            MargeDroite = Game.Window.ClientBounds.Width - (int)Delta.X;
-            MargeBas = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            base.Initialize();
         }
 
         /// <summary>
@@ -95,17 +70,17 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void EffectuerMiseÀJour()
         {
-            if(Rangé == DescriptionImage.Y)
-                Rangé = 0;
+            //if(Rangé == DescriptionImage.Y)
+            //    Rangé = 0;
 
-            VariableÀChangerDeNom = (RectangleSource.X + (int)Delta.X) % Image.Width;
+            //VariableÀChangerDeNom = (RectangleSource.X + (int)Delta.X) % Image.Width;
 
-            RectangleSource = new Rectangle(VariableÀChangerDeNom,
-                                   (int)Delta.Y * Rangé, (int)Delta.X, (int)Delta.Y);
+            //RectangleSource = new Rectangle(VariableÀChangerDeNom,
+            //                       (int)Delta.Y * Rangé, (int)Delta.X, (int)Delta.Y);
 
-            if(VariableÀChangerDeNom == DescriptionImage.X - 1)
-                ++Rangé;
-
+            //if(VariableÀChangerDeNom == DescriptionImage.X - 1)
+            //    ++Rangé;
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)
@@ -121,11 +96,6 @@ namespace AtelierXNA
             }
         }
 
-        //protected virtual void SpriteAniméSurUneLigne()//#ligneàmathieu
-        //{
-        //    RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
-        //}
-
         /// <summary>
         /// Méthode qui dessine le SpriteAnimé à l'écran
         /// </summary>
@@ -133,6 +103,23 @@ namespace AtelierXNA
         public override void Draw(GameTime gameTime)
         {
             GestionSprites.Draw(Image, Position, RectangleSource, Color.White);
+        }
+
+        /// <summary>
+        /// Prédicat vrai si le Sprite est en collision avec un autre objet
+        /// </summary>
+        /// <param name="autreObjet"></param>
+        /// <returns></returns>
+        public override bool EstEnCollision(object autreObjet)
+        {
+            SpriteAnimé autreSprite = (SpriteAnimé)autreObjet;
+            Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImageÀLÉchelle, autreSprite.RectangleDimensionsImageÀLÉchelle);
+            bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
+
+            ÀDétruire = collision;
+            autreSprite.ÀDétruire = collision;
+
+            return collision;
         }
     }
 }

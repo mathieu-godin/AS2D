@@ -26,10 +26,10 @@ namespace AtelierXNA
         const int DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
         //const float AUCUNE_COUCHE_DE_PROFONDEUR = 0.0F;
         //const float AUCUNE_ROTATION = 0.0F;
-        const float ORDONN…E_NULLE = 0.0F;
-        const float ABSCISSE_NULLE = 0.0F;
-        const float HAUTEUR_NULLE = 0.0F;
-        const float LARGEUR_NULLE = 0.0F;
+        protected const int ORDONN…E_NULLE = 0;
+        protected const int ABSCISSE_NULLE = 0;
+        protected const int HAUTEUR_NULLE = 0;
+        protected const int LARGEUR_NULLE = 0;
 
         string NomImage { get; set; }
         protected Vector2 Position { get; set; }
@@ -40,6 +40,11 @@ namespace AtelierXNA
         float …chelle { get; set; }
         //Vector2 Origine { get; set; }
         protected Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
+        protected Vector2 Delta { get; set; }
+        protected int MargeDroite { get; set; }
+        protected int MargeBas { get; set; }
+        protected int MargeGauche { get; set; }
+        protected int MargeHaut { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Sprite
@@ -64,6 +69,8 @@ namespace AtelierXNA
             …chelle = Calculer…chelle();
             //Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
             RectangleDimensionsImage¿L…chelle = new Rectangle(ZoneAffichage.X, ZoneAffichage.Y, (int)(Image.Width * …chelle), (int)(Image.Height * …chelle));
+            MargeHaut = HAUTEUR_NULLE;
+            MargeGauche = LARGEUR_NULLE;
         }
 
         /// <summary>
@@ -85,6 +92,7 @@ namespace AtelierXNA
             GestionSprites = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
             GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
             Image = GestionnaireDeTextures.Find(NomImage);
+            CalculerMarges();
         }
 
         /// <summary>
@@ -103,12 +111,24 @@ namespace AtelierXNA
         /// </summary>
         /// <param name="autreObjet"></param>
         /// <returns></returns>
-        public bool EstEnCollision(object autreObjet)
+        public virtual bool EstEnCollision(object autreObjet)
         {
-            Sprite autreSprite = (Sprite)autreObjet;
+            SpriteAnimÈ autreSprite = (SpriteAnimÈ)autreObjet;
             Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImage¿L…chelle, autreSprite.RectangleDimensionsImage¿L…chelle);
+            bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
 
-            return rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
+            autreSprite.¿DÈtruire = collision;
+
+            return collision;
+        }
+
+        /// <summary>
+        /// Calcule les marges du sprite
+        /// </summary>
+        protected void CalculerMarges()
+        {
+            MargeDroite = Game.Window.ClientBounds.Width - RectangleDimensionsImage¿L…chelle.Width;
+            MargeBas = Game.Window.ClientBounds.Height - RectangleDimensionsImage¿L…chelle.Height;
         }
     }
 }
