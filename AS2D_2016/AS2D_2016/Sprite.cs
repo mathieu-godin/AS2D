@@ -40,7 +40,6 @@ namespace AtelierXNA
         float …chelle { get; set; }
         //Vector2 Origine { get; set; }
         protected Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
-        protected Vector2 Delta { get; set; }
         protected int MargeDroite { get; set; }
         protected int MargeBas { get; set; }
         protected int MargeGauche { get; set; }
