@@ -48,9 +48,7 @@ namespace AtelierXNA
         /// <param name="zoneAffichage">Zone d'affichage du sprite</param>
         /// <param name="descriptionImage">Le nombres de sprites en x et en y contenus dans l'image chargée</param>
         /// <param name="intervalleMAJAnimation">Intervalle de mise à jour de l'animation du sprite</param>
-        public SpriteAnimé(Game game, string nomImage, Vector2 position, Rectangle zoneAffichage,
-                           Vector2 descriptionImage, float intervalleMAJAnimation) 
-            : base(game, nomImage, position, zoneAffichage)
+        public SpriteAnimé(Game game, string nomImage, Vector2 position, Rectangle zoneAffichage, Vector2 descriptionImage, float intervalleMAJAnimation) : base(game, nomImage, position, zoneAffichage)
         {
             DescriptionImage = new Vector2(descriptionImage.X, descriptionImage.Y);
             IntervalleMAJAnnimation = intervalleMAJAnimation;
