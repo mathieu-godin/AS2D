@@ -34,8 +34,10 @@ namespace AtelierXNA
 
         //Propriétés initialement gérées par CalculerMarges
         protected Vector2 Delta { get; set; }
-        float MargeDroite { get; set; }
-        float MargeBas { get; set; }
+        protected int MargeDroite { get; set; }
+        protected int MargeBas { get; set; }
+        protected int MargeGauche { get; set; }
+        protected int MargeHaut { get; set; }
 
         /// <summary>
         /// Constructeur de la classe SpriteAnimé
@@ -72,6 +74,7 @@ namespace AtelierXNA
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             MargeDroite = Game.Window.ClientBounds.Width - (int)Delta.X;
             MargeBas = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            MargeGauche = 0; MargeHaut = 0;
         }
 
         /// <summary>
@@ -79,9 +82,13 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void EffectuerMiseÀJour()
         {
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
             ADétruire = EstEnCollision(this);
         }
+
+        //protected virtual void SpriteAniméSurUneLigne()//#ligneàmathieu
+        //{
+        //    RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+        //}
 
         /// <summary>
         /// Méthode qui dessine le SpriteAnimé à l'écran
