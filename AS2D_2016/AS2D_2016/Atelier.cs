@@ -15,12 +15,11 @@ namespace AtelierXNA
     {
         public const float INTERVALLE_CALCUL_FPS = 1f;
         public const float INTERVALLE_STANDARDS = 1f / 60f;
+
         GraphicsDeviceManager PériphériqueGraphique { get; set; }
         SpriteBatch GestionSprites { get; set; }
-
         RessourcesManager<SpriteFont> GestionnaireDeFonts { get; set; }
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
-
         InputManager GestionInput { get; set; }
 
         public Atelier()
