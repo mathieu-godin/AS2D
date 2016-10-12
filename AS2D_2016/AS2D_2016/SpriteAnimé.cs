@@ -11,14 +11,14 @@ Rôle : Composant qui hérite de Sprite et qui
 
 Créé : 5 octobre 2016
 */
-/*using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace AtelierXNA
 {
     /// <summary>
     /// Composant qui peut afficher un sprite animé par un défilement de sprites présents sur la même image chargée
     /// </summary>
-    public class SpriteAnimé : Sprite
+    public class SpriteAnimé : Sprite, IDestructible
     {
         //Constantes
         const float AUCUN_DÉPLACEMENT = 0.0F;
@@ -30,11 +30,14 @@ namespace AtelierXNA
 
         //Propriétés initialement gérées par LoadContent
         Rectangle RectangleSource { get; set; }
+        public bool ADétruire { get; set; }
 
         //Propriétés initialement gérées par CalculerMarges
         protected Vector2 Delta { get; set; }
-        float MargeDroite { get; set; }
-        float MargeBas { get; set; }
+        protected int MargeDroite { get; set; }
+        protected int MargeBas { get; set; }
+        protected int MargeGauche { get; set; }
+        protected int MargeHaut { get; set; }
 
         /// <summary>
         /// Constructeur de la classe SpriteAnimé
@@ -60,6 +63,7 @@ namespace AtelierXNA
         {
             base.LoadContent();
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
+            ADétruire = false;
         }
 
         /// <summary>
@@ -70,15 +74,21 @@ namespace AtelierXNA
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             MargeDroite = Game.Window.ClientBounds.Width - (int)Delta.X;
             MargeBas = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            MargeGauche = 0; MargeHaut = 0;
         }
 
         /// <summary>
         /// Méthode qui met à jour le SpriteAnimé selon le temps écoulé
         /// </summary>
-        protected void EffectuerMiseÀJour()
+        protected virtual void EffectuerMiseÀJour()
         {
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+            ADétruire = EstEnCollision(this);
         }
+
+        //protected virtual void SpriteAniméSurUneLigne()//#ligneàmathieu
+        //{
+        //    RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+        //}
 
         /// <summary>
         /// Méthode qui dessine le SpriteAnimé à l'écran
@@ -89,4 +99,4 @@ namespace AtelierXNA
             GestionSprites.Draw(Image, Position, RectangleSource, Color.White);
         }
     }
-}*/
+}
