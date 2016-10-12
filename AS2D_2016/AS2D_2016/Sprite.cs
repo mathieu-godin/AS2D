@@ -24,8 +24,8 @@ namespace AtelierXNA
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollisionable
     {
         const int DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
-        const float AUCUNE_COUCHE_DE_PROFONDEUR = 0.0F;
-        const float AUCUNE_ROTATION = 0.0F;
+        //const float AUCUNE_COUCHE_DE_PROFONDEUR = 0.0F;
+        //const float AUCUNE_ROTATION = 0.0F;
         const float ORDONN…E_NULLE = 0.0F;
         const float ABSCISSE_NULLE = 0.0F;
         const float HAUTEUR_NULLE = 0.0F;
@@ -38,8 +38,8 @@ namespace AtelierXNA
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         protected Texture2D Image { get; set; }
         float …chelle { get; set; }
-        Vector2 Origine { get; set; }
-        Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
+        //Vector2 Origine { get; set; }
+        protected Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Sprite
@@ -62,8 +62,8 @@ namespace AtelierXNA
         {
             base.Initialize();
             …chelle = Calculer…chelle();
-            Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
-            RectangleDimensionsImage¿L…chelle = new Rectangle((int)ABSCISSE_NULLE, (int)ORDONN…E_NULLE, (int)(Image.Width * …chelle), (int)(Image.Height * …chelle));
+            //Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
+            RectangleDimensionsImage¿L…chelle = new Rectangle(ZoneAffichage.X, ZoneAffichage.Y, (int)(Image.Width * …chelle), (int)(Image.Height * …chelle));
         }
 
         /// <summary>
@@ -93,7 +93,9 @@ namespace AtelierXNA
         /// <param name="gameTime">Contient les informations sur le temps de jeu</param>
         public override void Draw(GameTime gameTime)
         {
-            GestionSprites.Draw(Image, Position, ZoneAffichage, Color.White, AUCUNE_ROTATION, Origine, …chelle, SpriteEffects.None, AUCUNE_COUCHE_DE_PROFONDEUR);
+            //GestionSprites.Draw(Image, Position, ZoneAffichage, Color.White, AUCUNE_ROTATION, Origine, …chelle, SpriteEffects.None, AUCUNE_COUCHE_DE_PROFONDEUR);
+
+            GestionSprites.Draw(Image, RectangleDimensionsImage¿L…chelle, Color.White);
         }
 
         /// <summary>
