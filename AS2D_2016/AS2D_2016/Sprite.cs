@@ -34,7 +34,7 @@ namespace AtelierXNA
         string NomImage { get; set; }
         protected Vector2 Position { get; set; }
         Rectangle ZoneAffichage { get; set; }
-        SpriteBatch GestionSprites { get; set; }
+        protected SpriteBatch GestionSprites { get; set; }
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         protected Texture2D Image { get; set; }
         float Échelle { get; set; }
