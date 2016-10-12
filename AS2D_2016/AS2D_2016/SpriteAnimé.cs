@@ -11,14 +11,14 @@ Rôle : Composant qui hérite de Sprite et qui
 
 Créé : 5 octobre 2016
 */
-/*using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace AtelierXNA
 {
     /// <summary>
     /// Composant qui peut afficher un sprite animé par un défilement de sprites présents sur la même image chargée
     /// </summary>
-    public class SpriteAnimé : Sprite
+    public class SpriteAnimé : Sprite, IDestructible
     {
         //Constantes
         const float AUCUN_DÉPLACEMENT = 0.0F;
@@ -30,6 +30,7 @@ namespace AtelierXNA
 
         //Propriétés initialement gérées par LoadContent
         Rectangle RectangleSource { get; set; }
+        public bool ADétruire { get; set; }
 
         //Propriétés initialement gérées par CalculerMarges
         protected Vector2 Delta { get; set; }
@@ -60,6 +61,7 @@ namespace AtelierXNA
         {
             base.LoadContent();
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
+            ADétruire = false;
         }
 
         /// <summary>
@@ -78,6 +80,7 @@ namespace AtelierXNA
         protected void EffectuerMiseÀJour()
         {
             RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+            ADétruire = EstEnCollision(this);
         }
 
         /// <summary>
@@ -89,4 +92,4 @@ namespace AtelierXNA
             GestionSprites.Draw(Image, Position, RectangleSource, Color.White);
         }
     }
-}*/
+}
