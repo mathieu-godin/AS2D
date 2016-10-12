@@ -30,12 +30,13 @@ namespace AtelierXNA
         Vector2 DescriptionImage { get; set; }
         float IntervalleMAJAnnimation { get; set; }
 
-        //Propriétés initialement gérées par LoadContent
-        Rectangle RectangleSource { get; set; }
+        //Propriétés initialement gérées par Initialize
+        protected Rectangle RectangleSource { get; set; }
         public bool ADétruire { get; set; }
         float TempsÉcouléDepuisMAJ { get; set; }
-        int Rangé { get; set; }
-        int VariableÀChangerDeNom { get; set; }
+        //int Rangé { get; set; }
+        //int VariableÀChangerDeNom { get; set; }
+        protected Vector2 Delta { get; set; }
 
         /// <summary>
         /// Constructeur de la classe SpriteAnimé
@@ -58,10 +59,11 @@ namespace AtelierXNA
         public override void Initialize()
         {
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
+            Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             ADétruire = false;
             TempsÉcouléDepuisMAJ = 0;
             //Rangé = 0;
-            Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
+
             base.Initialize();
         }
 
