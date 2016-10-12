@@ -81,14 +81,9 @@
     <Compile Include="ICollisionable.cs" />
     <Compile Include="IDestructible.cs" />
     <Compile Include="Jeu.cs" />
-    <Compile Include="Missile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Sphère.cs" />
     <Compile Include="Sprite.cs" />
-    <Compile Include="SpriteAnimé.cs" />
-    <Compile Include="TexteCentré.cs" />
-    <Compile Include="VaisseauSpatial.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
