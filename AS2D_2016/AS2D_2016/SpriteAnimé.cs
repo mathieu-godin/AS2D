@@ -30,7 +30,7 @@ namespace AtelierXNA
 
         //Propriétés initialement gérées par LoadContent
         Rectangle RectangleSource { get; set; }
-        public bool ADétruire { get; set; }
+        public bool ÀDétruire { get; set; }
         float TempsÉcouléDepuisMAJ { get; set; }
         int Rangé { get; set; }
         int VariableÀChangerDeNom { get; set; }
@@ -66,7 +66,7 @@ namespace AtelierXNA
         {
             base.LoadContent();
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
-            ADétruire = false;
+            ÀDétruire = false;
             TempsÉcouléDepuisMAJ = 0;
             Rangé = 0;
         }
@@ -79,7 +79,8 @@ namespace AtelierXNA
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             MargeDroite = Game.Window.ClientBounds.Width - (int)Delta.X;
             MargeBas = Game.Window.ClientBounds.Height - (int)Delta.Y;
-            MargeGauche = 0; MargeHaut = 0;
+            MargeGauche = 0;
+            MargeHaut = 0;
         }
 
         /// <summary>
