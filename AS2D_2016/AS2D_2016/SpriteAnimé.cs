@@ -30,7 +30,7 @@ namespace AtelierXNA
 
         //Propriétés initialement gérées par LoadContent
         Rectangle RectangleSource { get; set; }
-        public bool ADétruire { get; set; }
+        public bool ÀDétruire { get; set; }
         float TempsÉcouléDepuisMAJ { get; set; }
         int Rangé { get; set; }
         int VariableÀChangerDeNom { get; set; }
@@ -58,15 +58,26 @@ namespace AtelierXNA
         }
 
         /// <summary>
+        /// Initialise les composants de SpriteAnimé
+        /// </summary>
+        public override void Initialize()
+        {
+            RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
+            ÀDétruire = false;
+            TempsÉcouléDepuisMAJ = 0;
+            Rangé = 0;
+            MargeHaut = 0;
+            MargeGauche = 0;
+            base.Initialize();
+        }
+
+        /// <summary>
         /// Méthode de chargement de contenu nécessaire au SpriteAnimé
         /// </summary>
         protected override void LoadContent()
         {
             base.LoadContent();
-            RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
-            ADétruire = false;
-            TempsÉcouléDepuisMAJ = 0;
-            Rangé = 0;
+            CalculerMarges();
         }
 
         /// <summary>
@@ -77,7 +88,6 @@ namespace AtelierXNA
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             MargeDroite = Game.Window.ClientBounds.Width - (int)Delta.X;
             MargeBas = Game.Window.ClientBounds.Height - (int)Delta.Y;
-            MargeGauche = 0; MargeHaut = 0;
         }
 
         /// <summary>
