@@ -9,6 +9,8 @@ RÙle : Composant qui est un DrawableGameComponent et
        un sprite ‡ l'Ècran par le biais d'un Texture2D
 
 CrÈÈ : 5 octobre 2016
+ModifiÈ : 12 octobre 2016
+Description : Affiche maintenant ‡ l'Èchelle et EstEnCollision a ÈtÈ implantÈ
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,15 +28,18 @@ namespace AtelierXNA
         const float AUCUNE_ROTATION = 0.0F;
         const float ORDONN…E_NULLE = 0.0F;
         const float ABSCISSE_NULLE = 0.0F;
+        const float HAUTEUR_NULLE = 0.0F;
+        const float LARGEUR_NULLE = 0.0F;
 
         string NomImage { get; set; }
         protected Vector2 Position { get; set; }
-        protected Rectangle ZoneAffichage { get; set; }
-        protected SpriteBatch GestionSprites { get; private set; }
+        Rectangle ZoneAffichage { get; set; }
+        SpriteBatch GestionSprites { get; set; }
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
-        protected Texture2D Image { get; private set; }
+        Texture2D Image { get; set; }
         float …chelle { get; set; }
         Vector2 Origine { get; set; }
+        Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Sprite
@@ -58,6 +63,7 @@ namespace AtelierXNA
             base.Initialize();
             …chelle = Calculer…chelle();
             Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
+            RectangleDimensionsImage¿L…chelle = new Rectangle((int)ABSCISSE_NULLE, (int)ORDONN…E_NULLE, (int)(Image.Width * …chelle), (int)(Image.Height * …chelle));
         }
 
         /// <summary>
@@ -97,7 +103,10 @@ namespace AtelierXNA
         /// <returns></returns>
         public bool EstEnCollision(object autreObjet)
         {
-            
+            Sprite autreSprite = (Sprite)autreObjet;
+            Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImage¿L…chelle, autreSprite.RectangleDimensionsImage¿L…chelle);
+
+            return rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
         }
     }
 }
