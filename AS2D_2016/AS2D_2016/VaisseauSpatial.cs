@@ -4,7 +4,7 @@
    Description :       Ce component, enfant de SpriteAnimé, permet
                        de gérer le vaisseau spatial.*/
 
-/*using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -25,13 +25,13 @@ namespace AtelierXNA
     public class VaisseauSpatial : SpriteAnimé
     {
         //Constante
-        const int SE_DÉPLACE = 1;
+        const int NB_PIXELS_DE_DÉPLACEMENT = 1;
 
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
 
-        int DeltaX { get; set; }
-        int DeltaY { get; set; }
+        //Propriété initialement gérée par LoadContent
+        bool SeDéplace { get; set; }
         InputManager GestionInput { get; set; }
 
         /// <summary>
@@ -62,15 +62,61 @@ namespace AtelierXNA
 
         }
 
+        protected override void EffectuerMiseÀJour()
+        {
+            base.EffectuerMiseÀJour();
+            GérerClavier();
+            if (SeDéplace)
+            {
+
+            }
+        }
+
+        void GérerClavier()
+        {
+            if (GestionInput.EstClavierActivé)
+            {
+                int déplacementHorizontal = GérerTouche(Keys.D) - GérerTouche(Keys.A);
+                int déplacementVertical = GérerTouche(Keys.S) - GérerTouche(Keys.W);
+                if (déplacementHorizontal != 0 || déplacementVertical != 0)
+                {
+                    SeDéplace = true;
+                    AjusterPosition(déplacementHorizontal, déplacementVertical);
+                }
+                else
+                {
+                    SeDéplace = false;
+                }
+            }
+        }
+
+        int GérerTouche(Keys touche)
+        {
+            return GestionInput.EstEnfoncée(touche) ? NB_PIXELS_DE_DÉPLACEMENT : 0;
+        }
+
+        void AjusterPosition(int déplacementHorizontal, int déplacementVertical)
+        {
+            float posX = CalculerPosition(déplacementHorizontal, Position.X, MargeGauche, MargeDroite);
+            float posY = CalculerPosition(déplacementVertical, Position.Y, MargeHaut, MargeBas);
+            Position = new Vector2(posX, posY);
+        }
+
+        float CalculerPosition(int déplacement, float posActuelle, int BorneMin, int BorneMax)
+        {
+            float position = posActuelle + déplacement;
+            return MathHelper.Min(MathHelper.Max(BorneMin, position), BorneMax);
+        }
+
         /// <summary>
         /// Allows the game component to update itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
+            EffectuerMiseÀJour();
 
             base.Update(gameTime);
         }
     }
-}*/
+}
