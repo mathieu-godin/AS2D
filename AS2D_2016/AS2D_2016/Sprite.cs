@@ -117,7 +117,7 @@ namespace AtelierXNA
             Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImage¿L…chelle, autreSprite.RectangleDimensionsImage¿L…chelle);
             bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
 
-            autreSprite.¿DÈtruire = collision;
+            autreSprite.ADÈtruire = collision;
 
             return collision;
         }

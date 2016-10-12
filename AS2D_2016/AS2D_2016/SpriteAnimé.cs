@@ -32,7 +32,7 @@ namespace AtelierXNA
 
         //Propriétés initialement gérées par LoadContent
         Rectangle RectangleSource { get; set; }
-        public bool ÀDétruire { get; set; }
+        public bool ADétruire { get; set; }
         float TempsÉcouléDepuisMAJ { get; set; }
         int Rangé { get; set; }
         int VariableÀChangerDeNom { get; set; }
@@ -58,7 +58,7 @@ namespace AtelierXNA
         public override void Initialize()
         {
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
-            ÀDétruire = false;
+            ADétruire = false;
             TempsÉcouléDepuisMAJ = 0;
             //Rangé = 0;
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
@@ -116,8 +116,8 @@ namespace AtelierXNA
             Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImageÀLÉchelle, autreSprite.RectangleDimensionsImageÀLÉchelle);
             bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
 
-            ÀDétruire = collision;
-            autreSprite.ÀDétruire = collision;
+            ADétruire = collision;
+            autreSprite.ADétruire = collision;
 
             return collision;
         }
