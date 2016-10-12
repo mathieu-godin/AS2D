@@ -4,6 +4,12 @@
    Description :       Ce DrawableGameComponent permet à l'arrière-plan
                        de se déplacer du haut vers le bas, et ce, à répétition.*/
 
+ 
+// Co-Auteur : Mathieu Godin
+// Modification majeure : 11 octobre 2016
+//Description : L'entiereté du code a été modifiée afin de rendre l'arrière-plan
+//              fonctionnel et pas écrasé
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,112 +17,115 @@ using Microsoft.Xna.Framework.Graphics;
 namespace AtelierXNA
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// Composant qui permet d'afficher un arrière plan déroulant à la verticale
     /// </summary>
     public class ArrièrePlanSpatial : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        //Propriétés initialement gérées par le constructeur
-        string NomImage { get; set; }
+        const float AUCUN_TEMPS_ÉCOULÉ = 0.0F;
+        const float ORDONNÉE_NULLE = 0.0F;
+        const float ABSCISSE_NULLE = 0.0F;
+        const float INCRÉMENT_ORDONNÉE = 0.3F;
+        const float ÉCHELLE = 4.0F / 7.0F;
+        const float AUCUN_ANGLE = 0.0F;
+        const float AUCUNE_ÉPAISSEUR_DE_COUCHE = 0.0F;
+
         float IntervalleMAJ { get; set; }
-
-        //Propriétés initialement gérées par Initialize
         float TempsÉcouléDepuisMAJ { get; set; }
-        Rectangle ZoneAffichagePremièreImage { get; set; }
-        Rectangle ZoneAffichageSecondeImage { get; set; }
-
-        //Propriétés initialement gérées par LoadContent
+        float HauteurImageMiseÀLÉchelle { get; set; }
+        Vector2 VecteurIncrément { get; set; }
+        Vector2 PositionPremierFond { get; set; }
+        Vector2 PositionDeuxièmeFond { get; set; }
+        Vector2 OrigineNulle { get; set; }
         SpriteBatch GestionSprites { get; set; }
+        string NomImage { get; set; }
         Texture2D ImageDeFond { get; set; }
 
         /// <summary>
-        /// Constructeur du DrawableGameComponent
+        /// Constructeur prenant en charge le jeu, le nom de l'image que l'on veut dérouler en arrière-plan et l'intervalle de mise à jour auquelle celle-ci sera déroulée
         /// </summary>
-        /// <param name="jeu">Objet de classe Game</param>
-        /// <param name="nomImage">Nom de l'image (string)</param>
-        /// <param name="intervalleMAJ">Intervalle de mise à jour (float)</param>
-        public ArrièrePlanSpatial(Game jeu, string nomImage, float intervalleMAJ)
-            : base(jeu)
+        /// <param name="jeu">Jeu de type Game</param>
+        /// <param name="nomImage">Chaîne de caractères représentant l'image que l'on veut afficher comme arrière-plan déroulant</param>
+        /// <param name="intervalleMAJ">Intervalle de mise à jour en secondes auquel on veut défiler l'arrière-plan</param>
+        public ArrièrePlanSpatial(Game jeu, string nomImage, float intervalleMAJ) : base(jeu)
         {
             NomImage = nomImage;
             IntervalleMAJ = intervalleMAJ;
         }
 
         /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
+        /// Méthode qui initialise les différentes propriétés de l'objet à leur valeur propre au commencement
         /// </summary>
         public override void Initialize()
         {
-            TempsÉcouléDepuisMAJ = 0;
-            ZoneAffichagePremièreImage = new Rectangle(0, -Game.Window.ClientBounds.Height,
-                            Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-            ZoneAffichageSecondeImage = new Rectangle(0, 0, 
-                            Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-
+            TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
+            OrigineNulle = new Vector2(ABSCISSE_NULLE, ORDONNÉE_NULLE);
+            VecteurIncrément = new Vector2(ABSCISSE_NULLE, INCRÉMENT_ORDONNÉE);
             base.Initialize();
+            HauteurImageMiseÀLÉchelle = ImageDeFond.Height * ÉCHELLE;
+            ReplacerFonds();
         }
 
         /// <summary>
-        /// Charge et gère davantage de contenu nécessaire
+        /// Replace les deux arrière-plans à leur position initiale afin de continuer le défilement de l'arrière-paln indéfinément
+        /// </summary>
+        void ReplacerFonds()
+        {
+            PositionPremierFond = new Vector2(ABSCISSE_NULLE, ORDONNÉE_NULLE);
+            PositionDeuxièmeFond = new Vector2(ABSCISSE_NULLE, -HauteurImageMiseÀLÉchelle);
+        }
+
+        /// <summary>
+        /// Charge du contenu nécessaire à l'objet
         /// </summary>
         protected override void LoadContent()
         {
             GestionSprites = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
             ImageDeFond = Game.Content.Load<Texture2D>("Textures/" + NomImage);
-            base.LoadContent();
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// Méthode qui met à jour le contenu de l'objet et que s'occupe de la gestion du temps
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Objet contenant les informations sur le temps lié au jeu</param>
         public override void Update(GameTime gameTime)
         {
-            float tempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            TempsÉcouléDepuisMAJ += tempsÉcoulé;
+            TempsÉcouléDepuisMAJ += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            VérifierSiIncrémentationNécessaire();
+        }
 
+        /// <summary>
+        /// Vérifie en fonction de l'intervalle de mise à jour si assez de temps s'est écoulé pour aller incrémenter et peut-être même inverser, si nécessaire, les deux arrières-plans semblables servant d'illusion au défilement
+        /// </summary>
+        void VérifierSiIncrémentationNécessaire()
+        {
             if (TempsÉcouléDepuisMAJ >= IntervalleMAJ)
             {
-                GérerImagesDeFond();
-
-                TempsÉcouléDepuisMAJ = 0;
+                TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
+                PositionPremierFond += VecteurIncrément;
+                PositionDeuxièmeFond += VecteurIncrément;
+                VérifierSiInversementNécessaire();
             }
-            base.Update(gameTime);
         }
 
         /// <summary>
-        /// Gère les images déroulantes
+        /// Vérifie si les deux arrière-plans ont parcouru la largeur de la fenêtre afin de les replacer à leurs positions initiales si c'est le cas
         /// </summary>
-        private void GérerImagesDeFond()
+        void VérifierSiInversementNécessaire()
         {
-            ZoneAffichagePremièreImage = new Rectangle(0, ZoneAffichagePremièreImage.Y + 1,
-                        Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-            ZoneAffichageSecondeImage = new Rectangle(0, ZoneAffichageSecondeImage.Y + 1,
-                        Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-
-            if (ZoneAffichagePremièreImage.Y > Game.Window.ClientBounds.Height)
+            if (PositionPremierFond.Y >= HauteurImageMiseÀLÉchelle)
             {
-                ZoneAffichagePremièreImage = new Rectangle(0, -Game.Window.ClientBounds.Height + 1,
-                        Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-            }
-
-            if (ZoneAffichageSecondeImage.Y > Game.Window.ClientBounds.Height)
-            {
-                ZoneAffichageSecondeImage = new Rectangle(0, -Game.Window.ClientBounds.Height + 1,
-                        Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
+                ReplacerFonds();
             }
         }
 
         /// <summary>
-        /// Gère l'affichage des images déroulantes
+        /// Dessine les deux arrière-plans à l'écran
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">Informations sur le temps de jeu de type GameTime</param>
         public override void Draw(GameTime gameTime)
         {
-            GestionSprites.Draw(ImageDeFond, ZoneAffichagePremièreImage, Color.White);
-            GestionSprites.Draw(ImageDeFond, ZoneAffichageSecondeImage, Color.White);
-
-            base.Draw(gameTime);
+            GestionSprites.Draw(ImageDeFond, PositionPremierFond, null, Color.White, AUCUN_ANGLE, OrigineNulle, ÉCHELLE, SpriteEffects.None, AUCUNE_ÉPAISSEUR_DE_COUCHE);
+            GestionSprites.Draw(ImageDeFond, PositionDeuxièmeFond, null, Color.White, AUCUN_ANGLE, OrigineNulle, ÉCHELLE, SpriteEffects.None, AUCUNE_ÉPAISSEUR_DE_COUCHE);
         }
     }
 }

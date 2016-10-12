@@ -18,12 +18,9 @@ namespace AtelierXNA
 {
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollisionable
     {
-        //Propriétés initialement gérées par le constructeur
         string NomImage { get; set; }
         protected Vector2 Position { get; set; }
         protected Rectangle ZoneAffichage { get; set; }
-
-        //Propriétés initialement gérées par LoadContent
         protected SpriteBatch GestionSprites { get; private set; }
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         protected Texture2D Image { get; private set; }
