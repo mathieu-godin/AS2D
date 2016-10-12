@@ -85,6 +85,8 @@ namespace AtelierXNA
             ADétruire = EstEnCollision(this);
         }
 
+
+
         //protected virtual void SpriteAniméSurUneLigne()//#ligneàmathieu
         //{
         //    RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
