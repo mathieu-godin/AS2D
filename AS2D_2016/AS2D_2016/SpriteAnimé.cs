@@ -31,6 +31,9 @@ namespace AtelierXNA
         //Propriétés initialement gérées par LoadContent
         Rectangle RectangleSource { get; set; }
         public bool ADétruire { get; set; }
+        float TempsÉcouléDepuisMAJ { get; set; }
+        int Rangé { get; set; }
+        int VariableÀChangerDeNom { get; set; }
 
         //Propriétés initialement gérées par CalculerMarges
         protected Vector2 Delta { get; set; }
@@ -64,6 +67,8 @@ namespace AtelierXNA
             base.LoadContent();
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             ADétruire = false;
+            TempsÉcouléDepuisMAJ = 0;
+            Rangé = 0;
         }
 
         /// <summary>
@@ -82,10 +87,31 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void EffectuerMiseÀJour()
         {
-            ADétruire = EstEnCollision(this);
+            if(Rangé == DescriptionImage.Y)
+                Rangé = 0;
+
+            VariableÀChangerDeNom = (RectangleSource.X + (int)Delta.X) % Image.Width;
+
+            RectangleSource = new Rectangle(VariableÀChangerDeNom,
+                                   (int)Delta.Y * Rangé, (int)Delta.X, (int)Delta.Y);
+
+            if(VariableÀChangerDeNom == DescriptionImage.X - 1)
+                ++Rangé;
+
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            //ADétruire = EstEnCollision(this); LIGNE PAS BONNE À CHANGER
 
+            float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            TempsÉcouléDepuisMAJ += TempsÉcoulé;
+            if (TempsÉcouléDepuisMAJ >= IntervalleMAJAnnimation)
+            {
+                EffectuerMiseÀJour();
+                TempsÉcouléDepuisMAJ = 0;
+            }
+        }
 
         //protected virtual void SpriteAniméSurUneLigne()//#ligneàmathieu
         //{
