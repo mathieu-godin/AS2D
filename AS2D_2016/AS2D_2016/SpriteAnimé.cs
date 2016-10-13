@@ -57,6 +57,7 @@ namespace AtelierXNA
         /// </summary>
         public override void Initialize()
         {
+            LoadContent();
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             ADétruire = false;
             TempsÉcouléDepuisMAJ = 0;
@@ -80,7 +81,7 @@ namespace AtelierXNA
 
             //if(VariableÀChangerDeNom == DescriptionImage.X - 1)
             //    ++Rangé;
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X >= Image.Width - (int)Delta.X ? (RectangleSource.Y >= Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)
