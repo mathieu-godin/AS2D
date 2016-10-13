@@ -25,6 +25,8 @@ namespace AtelierXNA
     public class VaisseauSpatial : SpriteAnimé
     {
         //Constante
+        const int NE_SE_DÉPLACE_PAS = 0;
+        const int SE_DÉPLACE = 1;
         const int NB_PIXELS_DE_DÉPLACEMENT = 1;
 
         //Propriété initialement gérée par le constructeur
@@ -33,6 +35,8 @@ namespace AtelierXNA
         //Propriété initialement gérée par LoadContent
         bool SeDéplace { get; set; }
         InputManager GestionInput { get; set; }
+
+        int VariableÀChangerDeNom { get; set; }
 
         /// <summary>
         /// Constructeur de VaisseauSpatial
@@ -64,12 +68,11 @@ namespace AtelierXNA
 
         protected override void EffectuerMiseÀJour()
         {
-            base.EffectuerMiseÀJour();
             GérerClavier();
-            if (SeDéplace)
-            {
 
-            }
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width,
+                                            (int)Delta.Y * (SeDéplace ? SE_DÉPLACE : NE_SE_DÉPLACE_PAS),
+                                            (int)Delta.X, (int)Delta.Y);
         }
 
         void GérerClavier()
@@ -108,15 +111,5 @@ namespace AtelierXNA
             return MathHelper.Min(MathHelper.Max(BorneMin, position), BorneMax);
         }
 
-        /// <summary>
-        /// Allows the game component to update itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public override void Update(GameTime gameTime)
-        {
-            EffectuerMiseÀJour();
-
-            base.Update(gameTime);
-        }
     }
 }
