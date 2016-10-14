@@ -28,7 +28,10 @@ namespace AtelierXNA
     /// </summary>
     public class Sphère : SpriteAnimé
     {
+        const int DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
+
         float IntervalleMAJDéplacement { get; set; }
+        Random GénérateurAléatoire { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Sphère
@@ -49,8 +52,19 @@ namespace AtelierXNA
         /// </summary>
         public override void Initialize()
         {
-
+            LoadContent();
             base.Initialize();
+            /* Peut-être +1 au générateur car exclu*/
+            Position = new Vector2(GénérateurAléatoire.Next(ABSCISSE_NULLE, MargeDroite), GénérateurAléatoire.Next(ORDONNÉE_NULLE, MargeBas / DIVISEUR_OBTENTION_DEMI_GRANDEUR));
+        }
+
+        /// <summary>
+        /// Charge le contenu nécessaire au fonctionnement de la sphère
+        /// </summary>
+        protected override void LoadContent()
+        {
+            GénérateurAléatoire = Game.Services.GetService(typeof(Random)) as Random;
+            base.LoadContent();
         }
 
         /// <summary>
@@ -59,7 +73,6 @@ namespace AtelierXNA
         /// <param name="gameTime">Contient les informations sur le temps de jeu</param>
         public override void Update(GameTime gameTime)
         {
-
             base.Update(gameTime);
         }
     }

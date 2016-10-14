@@ -4,7 +4,7 @@ SpriteAnimé.cs
 
 Par Mathieu Godin
 
-Rôle : Composant qui hérite de Sprite et qui
+Rôle : Composant qui hérite de Sprite et qui 
        permet d'animer le sprite qui sera
        affiché à l'écran en défilant différent
        dans la même image chargée
