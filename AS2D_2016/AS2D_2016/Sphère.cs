@@ -28,10 +28,12 @@ namespace AtelierXNA
     /// </summary>
     public class Sphère : SpriteAnimé
     {
-        const int DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
+        const int ANGLE_DÉPLACEMENT_DÉPART_MINIMAL = 15, ANGLE_DÉPLACEMENT_DÉPART_MAXIMAL = 75;
 
         float IntervalleMAJDéplacement { get; set; }
         Random GénérateurAléatoire { get; set; }
+        float TempsÉcouléDepuisMAJDéplacement { get; set; }
+        float AngleDéplacement { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Sphère
@@ -56,6 +58,7 @@ namespace AtelierXNA
             base.Initialize();
             /* Peut-être +1 au générateur car exclu*/
             Position = new Vector2(GénérateurAléatoire.Next(ABSCISSE_NULLE, MargeDroite), GénérateurAléatoire.Next(ORDONNÉE_NULLE, MargeBas / DIVISEUR_OBTENTION_DEMI_GRANDEUR));
+            AngleDéplacement = GénérateurAléatoire.Next(ANGLE_DÉPLACEMENT_DÉPART_MINIMAL, ANGLE_DÉPLACEMENT_DÉPART_MAXIMAL);
         }
 
         /// <summary>
@@ -74,6 +77,20 @@ namespace AtelierXNA
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            TempsÉcouléDepuisMAJDéplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TempsÉcouléDepuisMAJDéplacement >= IntervalleMAJDéplacement)
+            {
+                EffectuerMiseÀJourDéplacement();
+                TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
+            }
+        }
+
+        /// <summary>
+        /// Méthode qui met à jour le déplacement de la sphère selon le temps écoulé
+        /// </summary>
+        protected virtual void EffectuerMiseÀJourDéplacement()
+        {
+            Position += Vector2.UnitY;
         }
     }
 }

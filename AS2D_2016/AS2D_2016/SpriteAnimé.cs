@@ -23,8 +23,7 @@ namespace AtelierXNA
     public class SpriteAnimé : Sprite, IDestructible
     {
         //Constantes
-        const float AUCUN_DÉPLACEMENT = 0.0F;
-        const int ORIGINE = 0;
+        protected const int AUCUN_TEMPS_ÉCOULÉ = 0, AUCUN_DÉPLACEMENT = 0, ORIGINE = 0;
 
         //Propriétés initialement gérées par le constructeur
         Vector2 DescriptionImage { get; set; }
@@ -33,7 +32,7 @@ namespace AtelierXNA
         //Propriétés initialement gérées par Initialize
         protected Rectangle RectangleSource { get; set; }
         public bool ADétruire { get; set; }
-        float TempsÉcouléDepuisMAJ { get; set; }
+        float TempsÉcouléDepuisMAJAnimation { get; set; }
         //int Rangé { get; set; }
         //int VariableÀChangerDeNom { get; set; }
         protected Vector2 Delta { get; set; }
@@ -63,7 +62,7 @@ namespace AtelierXNA
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             ADétruire = false;
-            TempsÉcouléDepuisMAJ = 0;
+            TempsÉcouléDepuisMAJAnimation = 0;
             //Rangé = 0;
 
             base.Initialize();
@@ -72,7 +71,7 @@ namespace AtelierXNA
         /// <summary>
         /// Méthode qui met à jour le SpriteAnimé selon le temps écoulé
         /// </summary>
-        protected virtual void EffectuerMiseÀJour()
+        protected virtual void EffectuerMiseÀJourAnimation()
         {
             //if(Rangé == DescriptionImage.Y)
             //    Rangé = 0;
@@ -91,12 +90,11 @@ namespace AtelierXNA
         {
             //ADétruire = EstEnCollision(this); LIGNE PAS BONNE À CHANGER
 
-            float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            TempsÉcouléDepuisMAJ += TempsÉcoulé;
-            if (TempsÉcouléDepuisMAJ >= IntervalleMAJAnnimation)
+            TempsÉcouléDepuisMAJAnimation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TempsÉcouléDepuisMAJAnimation >= IntervalleMAJAnnimation)
             {
-                EffectuerMiseÀJour();
-                TempsÉcouléDepuisMAJ = 0;
+                EffectuerMiseÀJourAnimation();
+                TempsÉcouléDepuisMAJAnimation = AUCUN_TEMPS_ÉCOULÉ;
             }
         }
 

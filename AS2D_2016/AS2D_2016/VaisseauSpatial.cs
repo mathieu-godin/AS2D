@@ -66,7 +66,7 @@ namespace AtelierXNA
 
         }
 
-        protected override void EffectuerMise¿Jour()
+        protected override void EffectuerMise¿JourAnimation()
         {
             GÈrerClavier();
 
