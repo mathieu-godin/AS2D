@@ -109,7 +109,6 @@ namespace AtelierXNA
             //ADétruire = EstEnCollision(this); LIGNE PAS BONNE À CHANGER
             DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y,(int)(Delta.X * Échelle), (int)(Delta.Y * Échelle));
 
-
             TempsÉcouléDepuisMAJAnimation += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJAnimation >= IntervalleMAJAnnimation)
             {
