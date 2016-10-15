@@ -67,7 +67,7 @@ namespace AtelierXNA
             base.Initialize();
             …chelle = Calculer…chelle();
             //Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
-            RectangleDimensionsImage¿L…chelle = new Rectangle(ZoneAffichage.X, ZoneAffichage.Y, (int)(Image.Width * …chelle), (int)(Image.Height * …chelle));
+            RectangleDimensionsImage¿L…chelle = new Rectangle((int)Position.X, (int)Position.Y, (int)(Image.Width * …chelle), (int)(Image.Height * …chelle));
             MargeHaut = HAUTEUR_NULLE;
             MargeGauche = LARGEUR_NULLE;
         }
