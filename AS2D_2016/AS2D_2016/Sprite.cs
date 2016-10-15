@@ -29,11 +29,11 @@ namespace AtelierXNA
 
         string NomImage { get; set; }
         protected Vector2 Position { get; set; }
-        Rectangle ZoneAffichage { get; set; }
+        protected Rectangle ZoneAffichage { get; set; }
         protected SpriteBatch GestionSprites { get; set; }
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         /* probably private */ protected Texture2D Image { get; set; }
-        float …chelle { get; set; }
+        protected float …chelle { get; set; }
         //Vector2 Origine { get; set; }
         protected Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
         protected int MargeDroite { get; set; }
@@ -72,9 +72,10 @@ namespace AtelierXNA
         /// Calcule l'Èchelle en calculant l'Èchelle horizontale et verticale et prenant la plus petite des deux
         /// </summary>
         /// <returns>La plus petite des Èchelles horizontales et verticales</returns>
-        float Calculer…chelle()
+        protected virtual float Calculer…chelle()
         {
-            float ÈchelleHorizontale = ZoneAffichage.Width / Image.Width, ÈchelleVerticale = ZoneAffichage.Height / Image.Height;
+            //Rajout de cast de float car sinon ca fesait une division entiËre qui donnait tj 0! Mais anyway cest pas bon mais bon, va voir le remix dans SpriteAnimÈ LOL.
+            float ÈchelleHorizontale = ZoneAffichage.Width / (float)Image.Width, ÈchelleVerticale = ZoneAffichage.Height / (float)Image.Height;
 
             return ÈchelleHorizontale < ÈchelleVerticale ? ÈchelleHorizontale : ÈchelleVerticale;
         }
