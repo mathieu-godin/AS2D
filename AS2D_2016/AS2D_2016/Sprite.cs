@@ -120,7 +120,7 @@ namespace AtelierXNA
         /// <summary>
         /// Calcule les marges du sprite
         /// </summary>
-        protected void CalculerMarges()
+        protected virtual void CalculerMarges()
         {
             MargeDroite = Game.Window.ClientBounds.Width - RectangleDimensionsImage¿L…chelle.Width;
             MargeBas = Game.Window.ClientBounds.Height - RectangleDimensionsImage¿L…chelle.Height;
