@@ -37,6 +37,9 @@ namespace AtelierXNA
         //int VariableÀChangerDeNom { get; set; }
         protected Vector2 Delta { get; set; }
 
+        Rectangle DestinationRectangle { get; set; }
+
+
         /// <summary>
         /// Constructeur de la classe SpriteAnimé
         /// </summary>
@@ -65,7 +68,22 @@ namespace AtelierXNA
             TempsÉcouléDepuisMAJAnimation = 0;
             //Rangé = 0;
 
+
+            Échelle = CalculerÉchelle();
+
+            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y,
+                (int)(Delta.X * Échelle), (int)(Delta.Y * Échelle));
+
+
+            
             base.Initialize();
+        }
+
+        protected override float CalculerÉchelle()
+        {
+            float échelleHorizontale = ZoneAffichage.Width / Delta.X, échelleVerticale = ZoneAffichage.Height / Delta.Y;
+
+            return échelleHorizontale < échelleVerticale ? échelleHorizontale : échelleVerticale;
         }
 
         /// <summary>
@@ -89,6 +107,8 @@ namespace AtelierXNA
         public override void Update(GameTime gameTime)
         {
             //ADétruire = EstEnCollision(this); LIGNE PAS BONNE À CHANGER
+            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y,(int)(Delta.X * Échelle), (int)(Delta.Y * Échelle));
+
 
             TempsÉcouléDepuisMAJAnimation += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJAnimation >= IntervalleMAJAnnimation)
@@ -104,7 +124,7 @@ namespace AtelierXNA
         /// <param name="gameTime">Objet contenant l'information de temps de jeu de type GameTime</param>
         public override void Draw(GameTime gameTime)
         {
-            GestionSprites.Draw(Image, Position, RectangleSource, Color.White);
+            GestionSprites.Draw(Image, DestinationRectangle, RectangleSource, Color.White);
         }
 
         /// <summary>
