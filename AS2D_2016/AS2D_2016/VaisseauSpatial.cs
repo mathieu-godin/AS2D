@@ -27,16 +27,22 @@ namespace AtelierXNA
         //Constante
         const int NE_SE_DÉPLACE_PAS = 0;
         const int SE_DÉPLACE = 1;
-        const int NB_PIXELS_DE_DÉPLACEMENT = 1;
+        const int NB_PIXELS_DE_DÉPLACEMENT = 5;
 
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
 
+        //Propriété initialement gérée par Initialize
+        float TempsÉcouléDepuisMAJ { get; set; }
+        int AnimationSelonLeDéplacement { get; set; }
+        Vector2 AnciennePosition { get; set; }
+
         //Propriété initialement gérée par LoadContent
-        bool SeDéplace { get; set; }
         InputManager GestionInput { get; set; }
 
-        int VariableÀChangerDeNom { get; set; }
+        //à voir
+        Vector2 DéplacementRésultant { get; set; }
+
 
         /// <summary>
         /// Constructeur de VaisseauSpatial
@@ -58,21 +64,52 @@ namespace AtelierXNA
             IntervalleMAJDéplacement = intervalleMAJDéplacement;
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            TempsÉcouléDepuisMAJ = 0;
+            AnimationSelonLeDéplacement = 0;
+            AnciennePosition = new Vector2(Position.X, Position.Y);
+        }
+
         protected override void LoadContent()
         {
             base.LoadContent();
 
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
-
         }
 
         protected override void EffectuerMiseÀJour()
         {
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width,
+                             (int)Delta.Y *AnimationSelonLeDéplacement,
+                             (int)Delta.X, (int)Delta.Y);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            TempsÉcouléDepuisMAJ += TempsÉcoulé;
+            if (TempsÉcouléDepuisMAJ >= IntervalleMAJDéplacement)
+            {
+                EffectuerMiseÀJourDéplacement();
+                TempsÉcouléDepuisMAJ = 0;
+            }
+        }
+
+        void EffectuerMiseÀJourDéplacement()
+        {
+            AnciennePosition = new Vector2(Position.X, Position.Y);
+            
             GérerClavier();
 
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width,
-                                            (int)Delta.Y * (SeDéplace ? SE_DÉPLACE : NE_SE_DÉPLACE_PAS),
-                                            (int)Delta.X, (int)Delta.Y);
+            DéplacementRésultant = Position - AnciennePosition;
+
+            AnimationSelonLeDéplacement = (SeDéplace()? SE_DÉPLACE : NE_SE_DÉPLACE_PAS);
+
         }
 
         void GérerClavier()
@@ -80,16 +117,7 @@ namespace AtelierXNA
             if (GestionInput.EstClavierActivé)
             {
                 int déplacementHorizontal = GérerTouche(Keys.D) - GérerTouche(Keys.A);
-                int déplacementVertical = GérerTouche(Keys.S) - GérerTouche(Keys.W);
-                if (déplacementHorizontal != 0 || déplacementVertical != 0)
-                {
-                    SeDéplace = true;
-                    AjusterPosition(déplacementHorizontal, déplacementVertical);
-                }
-                else
-                {
-                    SeDéplace = false;
-                }
+                AjusterPosition(déplacementHorizontal);
             }
         }
 
@@ -98,17 +126,22 @@ namespace AtelierXNA
             return GestionInput.EstEnfoncée(touche) ? NB_PIXELS_DE_DÉPLACEMENT : 0;
         }
 
-        void AjusterPosition(int déplacementHorizontal, int déplacementVertical)
+        void AjusterPosition(int déplacementHorizontal)
         {
             float posX = CalculerPosition(déplacementHorizontal, Position.X, MargeGauche, MargeDroite);
-            float posY = CalculerPosition(déplacementVertical, Position.Y, MargeHaut, MargeBas);
-            Position = new Vector2(posX, posY);
+
+            Position = new Vector2(posX, Position.Y);
         }
 
         float CalculerPosition(int déplacement, float posActuelle, int BorneMin, int BorneMax)
         {
             float position = posActuelle + déplacement;
             return MathHelper.Min(MathHelper.Max(BorneMin, position), BorneMax);
+        }
+
+        bool SeDéplace()
+        {
+            return DéplacementRésultant != Vector2.Zero;
         }
 
     }
