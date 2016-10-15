@@ -28,7 +28,7 @@ namespace AtelierXNA
     /// </summary>
     public class Sphère : SpriteAnimé
     {
-        const int ANGLE_DÉPLACEMENT_DÉPART_MINIMAL = 15, ANGLE_DÉPLACEMENT_DÉPART_MAXIMAL = 75, ANGLE_DROIT = 90, FACTEUR_MINIMAL_CERCLE_360_DEGRÉS = 0, FACTEUR_MAXIMAL_CERCLE_360_DEGRÉS_EXCLU = 4;
+        const int ANGLE_DÉPLACEMENT_DÉPART_MINIMAL = 15, ANGLE_DÉPLACEMENT_DÉPART_MAXIMAL = 75, ANGLE_DROIT = 90, FACTEUR_MINIMAL_CERCLE_360_DEGRÉS = 0, FACTEUR_MAXIMAL_CERCLE_360_DEGRÉS_EXCLU = 4, ANGLE_PLAT = 180, ANGLE_PLEIN = 360;
 
         float IntervalleMAJDéplacement { get; set; }
         Random GénérateurAléatoire { get; set; }
@@ -93,7 +93,16 @@ namespace AtelierXNA
         protected virtual void EffectuerMiseÀJourDéplacement()
         {
             Position += VecteurUnitaireDéplacementMAJ;
-            
+            if (Position.X <= MargeGauche || Position.X >= MargeDroite)
+            {
+                AngleDéplacement = ANGLE_PLAT - AngleDéplacement;
+                VecteurUnitaireDéplacementMAJ = new Vector2((float)Math.Cos(MathHelper.ToRadians(AngleDéplacement)), (float)Math.Sin(MathHelper.ToRadians(AngleDéplacement)));
+            }
+            else if (Position.Y >= MargeBas || Position.Y <= MargeHaut)
+            {
+                AngleDéplacement = ANGLE_PLEIN - AngleDéplacement;
+                VecteurUnitaireDéplacementMAJ = new Vector2((float)Math.Cos(MathHelper.ToRadians(AngleDéplacement)), (float)Math.Sin(MathHelper.ToRadians(AngleDéplacement)));
+            }
         }
     }
 }
