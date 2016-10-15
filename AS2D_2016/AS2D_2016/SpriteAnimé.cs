@@ -65,7 +65,7 @@ namespace AtelierXNA
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             ADétruire = false;
-            TempsÉcouléDepuisMAJAnimation = 0;
+            TempsÉcouléDepuisMAJAnimation = AUCUN_TEMPS_ÉCOULÉ;
             //Rangé = 0;
 
 
@@ -148,8 +148,8 @@ namespace AtelierXNA
         /// </summary>
         protected override void CalculerMarges()
         {
-            MargeDroite = Game.Window.ClientBounds.Width - (int)Delta.X;
-            MargeBas = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            MargeDroite = Game.Window.ClientBounds.Width - DestinationRectangle.Width;
+            MargeBas = Game.Window.ClientBounds.Height - DestinationRectangle.Height;
         }
     }
 }

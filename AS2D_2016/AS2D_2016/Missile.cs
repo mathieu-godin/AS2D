@@ -9,8 +9,9 @@ Rôle : Composant qui hérite de SpriteAnimé
        vers le haut en accélérant et son explosion
 
 Créé : 5 octobre 2016
+Modifié : 15 octobre 2016
 */
-/*using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -22,19 +23,19 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 
-namespace AS2D_2016
+namespace AtelierXNA
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// Composant qui hérite de SpriteAnimé
     /// </summary>
-    public class Sphère //: SpriteAnimé
+    public class Missile : SpriteAnimé
     {
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
-        string NomImageMissile { get; set; }
-        Vector2 DescriptionImageMissile { get; set; }
         string NomImageExplosion { get; set; }
         Vector2 DescriptionImageExplosion { get; set; }
+        Texture2D ImageExplosion { get; set; }
+        float TempsÉcouléDepuisMAJDéplacement { get; set; }
 
         /// <summary>
         /// Constructeur de Sphère
@@ -46,35 +47,53 @@ namespace AS2D_2016
         /// <param name="descriptionImage">Description de l'image (Vector2)</param>
         /// <param name="intervalleMAJAnimation">Intervalle de mise à jour de l'animation (float)</param>
         /// <param name="intervalleMAJDéplacement">Intervalle de mise à jour du déplacement (float)</param>
-        public Sphère(Game jeu, string nomImageMissile, Vector2 position, Rectangle zoneAffichage, Vector2 descriptionImageMissile, string nomImageExplosion, Vector2 descriptionImageExplosion, float intervalleMAJAnimation, float intervalleMAJDéplacement) : base(jeu, nomImageMissile, position, zoneAffichage, descriptionImageMissile, intervalleMAJAnimation)
+        public Missile(Game jeu, string nomImageMissile, Vector2 position, Rectangle zoneAffichage, Vector2 descriptionImageMissile, string nomImageExplosion, Vector2 descriptionImageExplosion, float intervalleMAJAnimation, float intervalleMAJDéplacement) : base(jeu, nomImageMissile, position, zoneAffichage, descriptionImageMissile, intervalleMAJAnimation)
         {
             IntervalleMAJDéplacement = intervalleMAJDéplacement;
-            NomImageMissile = nomImageMissile;
-            DescriptionImageMissile = descriptionImageMissile;
             NomImageExplosion = nomImageExplosion;
             DescriptionImageExplosion = descriptionImageExplosion;
         }
 
         /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
+        /// Initialise les composants de Missile
         /// </summary>
         public override void Initialize()
         {
-            // TODO: Add your initialization code here
-
+            LoadContent();
             base.Initialize();
+            TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// Charge le contenu nécessaire au fonctionnement du Missile
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+            ImageExplosion = GestionnaireDeTextures.Find(NomImageExplosion);
+        }
+
+        /// <summary>
+        /// Met à jour le Missile
+        /// </summary>
+        /// <param name="gameTime">Contient les informations de temps</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
-
             base.Update(gameTime);
+            TempsÉcouléDepuisMAJDéplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TempsÉcouléDepuisMAJDéplacement >= IntervalleMAJDéplacement)
+            {
+                EffectuerMiseÀJourDéplacement();
+                TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
+            }
+        }
+
+        /// <summary>
+        /// Méthode qui met à jour le déplacement du Missile selon le temps écoulé
+        /// </summary>
+        protected virtual void EffectuerMiseÀJourDéplacement()
+        {
+            Position -= Vector2.UnitY;
         }
     }
-}*/
+}
