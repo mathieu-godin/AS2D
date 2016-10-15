@@ -47,7 +47,14 @@ namespace AtelierXNA
             Components.Add(new ArrièrePlanSpatial(this, "CielÉtoilé", INTERVALLE_STANDARDS));
             Components.Add(new Jeu(this));
             Components.Add(new AfficheurFPS(this, "Arial", Color.Tomato, INTERVALLE_CALCUL_FPS));
-            /* TEMPORAIRE */ Components.Add(new TexteCentré(this, "Félicitations, vous avez atteint le niveau " + "4", "Arial", new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.Red, 0.2f));
+            ///* TEMPORAIRE */ Components.Add(new TexteCentré(this, "Félicitations, vous avez atteint le niveau " + "4", "Arial", new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.Red, 0.2f));
+            /*Temporaire*/              Components.Add(new VaisseauSpatial(this,
+            /*Temporaire*/                                                 "SpaceShip",
+            /*Temporaire*/                                                  new Vector2(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 4 * 3),
+            /*Temporaire*/                                                 new Rectangle(0, 0, Window.ClientBounds.Width / 5, Window.ClientBounds.Height / 5),
+            /*Temporaire*/                                                  new Vector2(4, 2),
+            /*Temporaire*/                                                  6 * INTERVALLE_STANDARDS,
+            /*Temporaire*/                                                  INTERVALLE_STANDARDS));
             base.Initialize();
         }
 
