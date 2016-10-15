@@ -142,5 +142,12 @@ namespace AtelierXNA
             return DéplacementRésultant != Vector2.Zero;
         }
 
+        //public override void Draw(GameTime gameTime)
+        //{
+        //    //GestionSprites.Draw(Image, Position, RectangleSource, Color.White);
+
+        //    GestionSprites.Draw(Image, new Rectangle((int)Position.X, (int)Position.Y, (int)(Delta.X*Échelle), (int)(Delta.Y*Échelle)),
+        //                        RectangleSource, Color.White);
+        //}
     }
 }
