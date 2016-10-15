@@ -15,8 +15,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-//CLASSE TR»S IMCOMPL»TE!!
-
 namespace AtelierXNA
 {
     /// <summary>
@@ -80,7 +78,7 @@ namespace AtelierXNA
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
         }
 
-        protected override void EffectuerMise¿Jour()
+        protected override void EffectuerMise¿JourAnimation()
         {
             RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width,
                              (int)Delta.Y *AnimationSelonLeDÈplacement,

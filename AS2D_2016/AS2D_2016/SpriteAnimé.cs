@@ -4,7 +4,7 @@ SpriteAnimé.cs
 
 Par Mathieu Godin
 
-Rôle : Composant qui hérite de Sprite et qui
+Rôle : Composant qui hérite de Sprite et qui 
        permet d'animer le sprite qui sera
        affiché à l'écran en défilant différent
        dans la même image chargée
@@ -23,8 +23,7 @@ namespace AtelierXNA
     public class SpriteAnimé : Sprite, IDestructible
     {
         //Constantes
-        const float AUCUN_DÉPLACEMENT = 0.0F;
-        const int ORIGINE = 0;
+        protected const int AUCUN_TEMPS_ÉCOULÉ = 0, AUCUN_DÉPLACEMENT = 0, ORIGINE = 0;
 
         //Propriétés initialement gérées par le constructeur
         Vector2 DescriptionImage { get; set; }
@@ -33,7 +32,7 @@ namespace AtelierXNA
         //Propriétés initialement gérées par Initialize
         protected Rectangle RectangleSource { get; set; }
         public bool ADétruire { get; set; }
-        float TempsÉcouléDepuisMAJ { get; set; }
+        float TempsÉcouléDepuisMAJAnimation { get; set; }
         //int Rangé { get; set; }
         //int VariableÀChangerDeNom { get; set; }
         protected Vector2 Delta { get; set; }
@@ -59,10 +58,11 @@ namespace AtelierXNA
         /// </summary>
         public override void Initialize()
         {
+            LoadContent();
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             ADétruire = false;
-            TempsÉcouléDepuisMAJ = 0;
+            TempsÉcouléDepuisMAJAnimation = 0;
             //Rangé = 0;
 
             base.Initialize();
@@ -71,7 +71,7 @@ namespace AtelierXNA
         /// <summary>
         /// Méthode qui met à jour le SpriteAnimé selon le temps écoulé
         /// </summary>
-        protected virtual void EffectuerMiseÀJour()
+        protected virtual void EffectuerMiseÀJourAnimation()
         {
             //if(Rangé == DescriptionImage.Y)
             //    Rangé = 0;
@@ -83,19 +83,18 @@ namespace AtelierXNA
 
             //if(VariableÀChangerDeNom == DescriptionImage.X - 1)
             //    ++Rangé;
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X > Image.Width - (int)Delta.X ? (RectangleSource.Y > Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X >= Image.Width - (int)Delta.X ? (RectangleSource.Y >= Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)
         {
             //ADétruire = EstEnCollision(this); LIGNE PAS BONNE À CHANGER
 
-            float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            TempsÉcouléDepuisMAJ += TempsÉcoulé;
-            if (TempsÉcouléDepuisMAJ >= IntervalleMAJAnnimation)
+            TempsÉcouléDepuisMAJAnimation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TempsÉcouléDepuisMAJAnimation >= IntervalleMAJAnnimation)
             {
-                EffectuerMiseÀJour();
-                TempsÉcouléDepuisMAJ = 0;
+                EffectuerMiseÀJourAnimation();
+                TempsÉcouléDepuisMAJAnimation = AUCUN_TEMPS_ÉCOULÉ;
             }
         }
 

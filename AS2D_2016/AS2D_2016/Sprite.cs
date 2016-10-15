@@ -23,13 +23,9 @@ namespace AtelierXNA
     /// </summary>
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollisionable
     {
-        const int DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
         //const float AUCUNE_COUCHE_DE_PROFONDEUR = 0.0F;
         //const float AUCUNE_ROTATION = 0.0F;
-        protected const int ORDONNÉE_NULLE = 0;
-        protected const int ABSCISSE_NULLE = 0;
-        protected const int HAUTEUR_NULLE = 0;
-        protected const int LARGEUR_NULLE = 0;
+        protected const int ORDONNÉE_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
 
         string NomImage { get; set; }
         protected Vector2 Position { get; set; }
