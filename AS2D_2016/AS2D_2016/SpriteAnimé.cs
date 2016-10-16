@@ -37,7 +37,7 @@ namespace AtelierXNA
         //int VariableÀChangerDeNom { get; set; }
         protected Vector2 Delta { get; set; }
 
-        protected Rectangle DestinationRectangle { get; set; }
+        public Rectangle DestinationRectangle { get; set; }
 
 
         /// <summary>
@@ -133,14 +133,18 @@ namespace AtelierXNA
         /// <returns></returns>
         public override bool EstEnCollision(object autreObjet)
         {
-            SpriteAnimé autreSprite = (SpriteAnimé)autreObjet;
-            Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImageÀLÉchelle, autreSprite.RectangleDimensionsImageÀLÉchelle);
-            bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
+            //SpriteAnimé autreSprite = (SpriteAnimé)autreObjet;
+            //Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImageÀLÉchelle, autreSprite.RectangleDimensionsImageÀLÉchelle);
+            //bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
 
-            ADétruire = collision;
-            autreSprite.ADétruire = collision;
+            //ADétruire = collision;
+            //autreSprite.ADétruire = collision;
 
-            return collision;
+            //return collision;
+
+            Rectangle autreRectangle = ((SpriteAnimé)autreObjet).DestinationRectangle;
+
+            return DestinationRectangle.Intersects(autreRectangle);
         }
 
         /// <summary>
