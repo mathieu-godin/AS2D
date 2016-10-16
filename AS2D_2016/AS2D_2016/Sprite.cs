@@ -28,7 +28,7 @@ namespace AtelierXNA
         protected const int ORDONNÉE_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
 
         string NomImage { get; set; }
-        protected Vector2 Position { get; set; }
+        public Vector2 Position { get; protected set; }
         protected Rectangle ZoneAffichage { get; set; }
         protected SpriteBatch GestionSprites { get; set; }
         protected RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
