@@ -107,7 +107,6 @@ namespace AtelierXNA
             DéplacementRésultant = Position - AnciennePosition;
 
             AnimationSelonLeDéplacement = (SeDéplace()? SE_DÉPLACE : NE_SE_DÉPLACE_PAS);
-
         }
 
         void GérerClavier()

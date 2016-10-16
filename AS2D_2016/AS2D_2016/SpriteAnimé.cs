@@ -148,8 +148,8 @@ namespace AtelierXNA
         /// </summary>
         protected override void CalculerMarges()
         {
-            MargeDroite = Game.Window.ClientBounds.Width - (int)Delta.X;
-            MargeBas = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            MargeDroite = Game.Window.ClientBounds.Width - DestinationRectangle.Width;
+            MargeBas = Game.Window.ClientBounds.Height - DestinationRectangle.Height;
         }
     }
 }
