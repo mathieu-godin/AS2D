@@ -37,6 +37,8 @@ namespace AtelierXNA
         Texture2D ImageExplosion { get; set; }
         float TempsÉcouléDepuisMAJDéplacement { get; set; }
 
+        public bool ExplosionActivée { get; set; }
+
         /// <summary>
         /// Constructeur de Sphère
         /// </summary>
@@ -94,6 +96,11 @@ namespace AtelierXNA
         protected virtual void EffectuerMiseÀJourDéplacement()
         {
             Position -= Vector2.UnitY;
+        }
+
+        public void ActiverExplosion()
+        {
+
         }
     }
 }

@@ -15,8 +15,8 @@ namespace AtelierXNA
         const float INTERVALLE_ANIMATION_LENT = 6 * Atelier.INTERVALLE_STANDARDS;
         const float INTERVALLE_ANIMATION_RAPIDE = 1.5f * Atelier.INTERVALLE_STANDARDS;
         int Niveau { get; set; }
-        //VaisseauSpatial Vaisseau { get; set; }
-        //SpriteAnimé Explosion { get; set; }
+        VaisseauSpatial Vaisseau { get; set; }
+        SpriteAnimé Explosion { get; set; }
         bool ExplosionActivé { get; set; }
         float TempsÉcouléDepuisMAJExplosion { get; set; }
         int PhaseExplosion { get; set; }
@@ -27,7 +27,7 @@ namespace AtelierXNA
         Random GénérateurAléatoire { get; set; }
         Vector2 DescriptionExplosion { get; set; }
         Vector2 Centre { get; set; }
-        //Sprite[] Vies { get; set; }
+        Sprite[] Vies { get; set; }
         int NbVies { get; set; }
         États ÉtatJeu { get; set; }
 
@@ -44,15 +44,15 @@ namespace AtelierXNA
             ZoneSphère = new Rectangle(0, 0, Game.Window.ClientBounds.Width / 10, Game.Window.ClientBounds.Height / 10);
             ZoneVie = new Rectangle(0, 0, Game.Window.ClientBounds.Width / 20, Game.Window.ClientBounds.Height / 20);
             DescriptionExplosion = new Vector2(5, 4);
-            //InitialiserVies();
+            InitialiserVies();
             Niveau = 1;
             NbVies = 3;
-            //CréerVaisseau();
-            //CréerNiveau();
+            CréerVaisseau();
+            CréerNiveau();
             ÉtatJeu = États.JEU;
         }
 
-        /*private void CréerVaisseau()
+        private void CréerVaisseau()
         {
             Vaisseau = new VaisseauSpatial(Game, "SpaceShip", Centre, ZoneVaisseau, new Vector2(4, 2), INTERVALLE_ANIMATION_LENT, Atelier.INTERVALLE_STANDARDS);
             Game.Components.Add(Vaisseau);
@@ -75,14 +75,14 @@ namespace AtelierXNA
                 Sphère nouvelleSphère = new Sphère(Game, "Sphère", Vector2.One, ZoneSphère, new Vector2(8, 4), INTERVALLE_ANIMATION_RAPIDE, Atelier.INTERVALLE_STANDARDS);
                 Game.Components.Add(nouvelleSphère);
             }
-        }*/
+        }
 
         public override void Update(GameTime gameTime)
         {
-            //bool vaisseauActif = !Vaisseau.ADétruire;
-            //int nbEnnemis = Game.Components.Count(x => x is Sphère && !((Sphère)x).ADétruire);
-            //GérerTransition(vaisseauActif, nbEnnemis);
-            //GérerÉtat(vaisseauActif, nbEnnemis, gameTime);
+            bool vaisseauActif = !Vaisseau.ADétruire;
+            int nbEnnemis = Game.Components.Count(x => x is Sphère && !((Sphère)x).ADétruire);
+            GérerTransition(vaisseauActif, nbEnnemis);
+            GérerÉtat(vaisseauActif, nbEnnemis, gameTime);
 
         }
 
@@ -91,16 +91,16 @@ namespace AtelierXNA
             switch (ÉtatJeu)
             {
                 case États.JEU:
-                    //GérerCollision();
+                    GérerCollision();
                     break;
                 case États.DESTRUCTION_VAISSEAU:
-                    //GérerExplosion(gameTime);
+                    GérerExplosion(gameTime);
                     break;
                 case États.NOUVEAU_VAISSEAU:
-                    //CréerVaisseau();
+                    CréerVaisseau();
                     break;
                 case États.NOUVELLE_VAGUE:
-                    //CréerNiveau();
+                    CréerNiveau();
                     break;
                 default:
                     AfficherMessageFélicitations();
@@ -110,7 +110,7 @@ namespace AtelierXNA
 
         private void AfficherMessageFélicitations()
         {
-            //Game.Components.Add(new TexteCentré(Game, "Félicitations, vous avez atteint le niveau " + Niveau.ToString(), "Arial", ZoneAffichage, Color.Red, 0.2f));
+            Game.Components.Add(new TexteCentré(Game, "Félicitations, vous avez atteint le niveau " + Niveau.ToString(), "Arial", ZoneAffichage, Color.Red, 0.2f));
         }
 
         private void GérerTransition(bool vaisseauActif, int nbEnnemis)
@@ -121,10 +121,10 @@ namespace AtelierXNA
                     GérerTransitionJEU(vaisseauActif, nbEnnemis);
                     break;
                 case États.DESTRUCTION_VAISSEAU:
-                    //GérerTransitionDESTRUCTION_VAISSEAU();
+                    GérerTransitionDESTRUCTION_VAISSEAU();
                     break;
                 case États.NOUVEAU_VAISSEAU:
-                    //GérerTransitionNOUVEAU_VAISSEAU(nbEnnemis);
+                    GérerTransitionNOUVEAU_VAISSEAU(nbEnnemis);
                     break;
                 default:
                     ÉtatJeu = États.JEU;
@@ -136,7 +136,7 @@ namespace AtelierXNA
         {
             if (ExplosionActivé)
             {
-                //ActiverExplosion();
+                ActiverExplosion();
                 ÉtatJeu = États.DESTRUCTION_VAISSEAU;
             }
             else
@@ -149,7 +149,7 @@ namespace AtelierXNA
             }
         }
 
-        /*private void GérerTransitionDESTRUCTION_VAISSEAU()
+        private void GérerTransitionDESTRUCTION_VAISSEAU()
         {
             if (!ExplosionActivé)
             {
@@ -164,9 +164,9 @@ namespace AtelierXNA
                     ÉtatJeu = États.FIN;
                 }
             }
-        }*/
+        }
 
-        /*private void GérerTransitionNOUVEAU_VAISSEAU(int nbEnnemis)
+        private void GérerTransitionNOUVEAU_VAISSEAU(int nbEnnemis)
         {
             if (nbEnnemis == 0)
             {
@@ -180,9 +180,9 @@ namespace AtelierXNA
                 }
             }
             ÉtatJeu = États.NOUVELLE_VAGUE;
-        }*/
+        }
 
-        /*private void GérerExplosion(GameTime gameTime)
+        private void GérerExplosion(GameTime gameTime)
         {
             float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
             TempsÉcouléDepuisMAJExplosion += TempsÉcoulé;
@@ -197,24 +197,24 @@ namespace AtelierXNA
                 }
             }
 
-        }*/
+        }
 
-        /*private void ActiverExplosion()
+        private void ActiverExplosion()
         {
             Explosion = new SpriteAnimé(Game, "Explosion", Vaisseau.Position, ZoneVaisseau, DescriptionExplosion, INTERVALLE_ANIMATION_LENT);
             Game.Components.Add(Explosion);
             ExplosionActivé = true;
             TempsÉcouléDepuisMAJExplosion = 0;
 
-        }*/
+        }
 
-        /*private void GérerCollision()
+        private void GérerCollision()
         {
             GérerCollisionMissile();
             GérerCollisionSphère();
-        }*/
+        }
 
-        /*private void GérerCollisionMissile()
+        private void GérerCollisionMissile()
         {
             foreach (Missile missile in Game.Components.Where(composant => composant is Missile && !((Missile)composant).ExplosionActivée))
             {
@@ -227,9 +227,9 @@ namespace AtelierXNA
                     }
                 }
             }
-        }*/
+        }
 
-        /*private void GérerCollisionSphère()
+        private void GérerCollisionSphère()
         {
             foreach (Sphère sphère in Game.Components.Where(composant => composant is Sphère && !((Sphère)composant).ADétruire))
             {
@@ -240,6 +240,6 @@ namespace AtelierXNA
                     ExplosionActivé = true;
                 }
             }
-        }*/
+        }
     }
 }
