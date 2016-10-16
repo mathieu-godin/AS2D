@@ -41,6 +41,7 @@ namespace AtelierXNA
         float TempsÉcouléDepuisMAJExplosion { get; set; }
         int PhaseExplosion { get; set; }
         SpriteAnimé Explosion { get; set; }
+        //bool ExplosionTerminée { get; set; }
 
         /// <summary>
         /// Constructeur de Sphère
@@ -67,6 +68,8 @@ namespace AtelierXNA
             LoadContent();
             base.Initialize();
             TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
+            ExplosionActivée = false;
+            //ExplosionTerminée = false;
         }
 
         /// <summary>
@@ -99,20 +102,27 @@ namespace AtelierXNA
         protected virtual void EffectuerMiseÀJourDéplacement(GameTime gameTime)
         {
             Position -= Vector2.UnitY;
-            if (Position.Y <= MargeHaut && !ExplosionActivée)
+            if (Position.Y <= MargeHaut && !ExplosionActivée /*&& !ExplosionTerminée*/)
             {
                 ActiverExplosionMissile();
-            }
-            if (ExplosionActivée)
-            {
                 GérerExplosion(gameTime);
             }
+            /*if (ExplosionTerminée)
+            {
+                for (int i = Game.Components.Count - 1; i >= 0; --i)
+                {
+                    if (Game.Components[i] is IDestructible && ((IDestructible)Game.Components[i]).ADétruire)
+                    {
+                        Game.Components.RemoveAt(i);
+                    }
+                }
+            }*/
         }
 
         /// <summary>
         /// Appelé quand le missile doit être explosé
         /// </summary>
-        void ActiverExplosion()
+        public void ActiverExplosion()
         {
             
         }
@@ -143,7 +153,8 @@ namespace AtelierXNA
                 if (PhaseExplosion >= DescriptionImageExplosion.X * DescriptionImageExplosion.Y)
                 {
                     ExplosionActivée = false;
-                    Game.Components.Remove(Explosion);
+                    Explosion.ADétruire = true;
+                    //ExplosionTerminée = true;
                 }
             }
 
