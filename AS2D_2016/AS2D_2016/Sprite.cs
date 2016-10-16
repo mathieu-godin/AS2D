@@ -109,13 +109,19 @@ namespace AtelierXNA
         /// <returns></returns>
         public virtual bool EstEnCollision(object autreObjet)
         {
-            SpriteAnimé autreSprite = (SpriteAnimé)autreObjet;
-            Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImageÀLÉchelle, autreSprite.RectangleDimensionsImageÀLÉchelle);
-            bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
+            //SpriteAnimé autreSprite = (SpriteAnimé)autreObjet;
+            //Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImageÀLÉchelle, autreSprite.RectangleDimensionsImageÀLÉchelle);
+            //bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
 
-            autreSprite.ADétruire = collision;
+            //autreSprite.ADétruire = collision;
+            //return collision;
 
-            return collision;
+            //Rectangle autreRectangle = ((SpriteAnimé)autreObjet).DestinationRectangle;
+
+            //return ZoneAffichage.Intersects(autreRectangle);
+
+            return true;
+
         }
 
         /// <summary>
