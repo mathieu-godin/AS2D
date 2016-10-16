@@ -30,12 +30,18 @@ namespace AtelierXNA
     /// </summary>
     public class Missile : SpriteAnimé
     {
+        const float INTERVALLE_ANIMATION_LENT = 6 * Atelier.INTERVALLE_STANDARDS;
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
         string NomImageExplosion { get; set; }
         Vector2 DescriptionImageExplosion { get; set; }
         Texture2D ImageExplosion { get; set; }
         float TempsÉcouléDepuisMAJDéplacement { get; set; }
+        public bool ExplosionActivée { get; private set; }
+        float TempsÉcouléDepuisMAJExplosion { get; set; }
+        int PhaseExplosion { get; set; }
+        SpriteAnimé Explosion { get; set; }
+        //bool ExplosionTerminée { get; set; }
 
         public bool ExplosionActivée { get; set; }
 
@@ -64,6 +70,8 @@ namespace AtelierXNA
             LoadContent();
             base.Initialize();
             TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
+            ExplosionActivée = false;
+            //ExplosionTerminée = false;
         }
 
         /// <summary>
@@ -85,7 +93,7 @@ namespace AtelierXNA
             TempsÉcouléDepuisMAJDéplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJDéplacement >= IntervalleMAJDéplacement)
             {
-                EffectuerMiseÀJourDéplacement();
+                EffectuerMiseÀJourDéplacement(gameTime);
                 TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
             }
         }
@@ -93,9 +101,65 @@ namespace AtelierXNA
         /// <summary>
         /// Méthode qui met à jour le déplacement du Missile selon le temps écoulé
         /// </summary>
-        protected virtual void EffectuerMiseÀJourDéplacement()
+        protected virtual void EffectuerMiseÀJourDéplacement(GameTime gameTime)
         {
             Position -= Vector2.UnitY;
+            if (Position.Y <= MargeHaut && !ExplosionActivée /*&& !ExplosionTerminée*/)
+            {
+                ActiverExplosionMissile();
+                GérerExplosion(gameTime);
+            }
+            /*if (ExplosionTerminée)
+            {
+                for (int i = Game.Components.Count - 1; i >= 0; --i)
+                {
+                    if (Game.Components[i] is IDestructible && ((IDestructible)Game.Components[i]).ADétruire)
+                    {
+                        Game.Components.RemoveAt(i);
+                    }
+                }
+            }*/
+        }
+
+        /// <summary>
+        /// Appelé quand le missile doit être explosé
+        /// </summary>
+        public void ActiverExplosion()
+        {
+            
+        }
+
+        /// <summary>
+        /// Active l'explosion du missile
+        /// </summary>
+        void ActiverExplosionMissile()
+        {
+            Explosion = new SpriteAnimé(Game, "Explosion", Position, ZoneAffichage, DescriptionImageExplosion, INTERVALLE_ANIMATION_LENT);
+            Game.Components.Add(Explosion);
+            ExplosionActivée = true;
+            TempsÉcouléDepuisMAJExplosion = AUCUN_TEMPS_ÉCOULÉ;
+        }
+
+        /// <summary>
+        /// Gère l'explosion du missile
+        /// </summary>
+        /// <param name="gameTime">Contient les informations de temps de jeu</param>
+        private void GérerExplosion(GameTime gameTime)
+        {
+            float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            TempsÉcouléDepuisMAJExplosion += TempsÉcoulé;
+            if (TempsÉcouléDepuisMAJExplosion >= INTERVALLE_ANIMATION_LENT)
+            {
+                ++PhaseExplosion;
+                TempsÉcouléDepuisMAJExplosion = AUCUN_TEMPS_ÉCOULÉ;
+                if (PhaseExplosion >= DescriptionImageExplosion.X * DescriptionImageExplosion.Y)
+                {
+                    ExplosionActivée = false;
+                    Explosion.ADétruire = true;
+                    //ExplosionTerminée = true;
+                }
+            }
+
         }
 
         public void ActiverExplosion()

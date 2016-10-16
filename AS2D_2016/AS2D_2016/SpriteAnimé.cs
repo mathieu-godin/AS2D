@@ -27,7 +27,7 @@ namespace AtelierXNA
 
         //Propriétés initialement gérées par le constructeur
         Vector2 DescriptionImage { get; set; }
-        float IntervalleMAJAnnimation { get; set; }
+        protected float IntervalleMAJAnnimation { get; set; }
 
         //Propriétés initialement gérées par Initialize
         protected Rectangle RectangleSource { get; set; }
