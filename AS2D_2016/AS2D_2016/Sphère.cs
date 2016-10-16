@@ -9,6 +9,7 @@ Rôle : Composant qui hérite de SpriteAnimé et qui
        murs de l'écran
 
 Créé : 12 octobre 2016
+Modifié : 15 octobre 2016
 */
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,7 @@ namespace AtelierXNA
             Position = new Vector2(GénérateurAléatoire.Next(ABSCISSE_NULLE, MargeDroite), GénérateurAléatoire.Next(ORDONNÉE_NULLE, MargeBas / DIVISEUR_OBTENTION_DEMI_GRANDEUR));
             AngleDéplacement = GénérateurAléatoire.Next(FACTEUR_MINIMAL_CERCLE_360_DEGRÉS, FACTEUR_MAXIMAL_CERCLE_360_DEGRÉS_EXCLU) * ANGLE_DROIT + GénérateurAléatoire.Next(ANGLE_DÉPLACEMENT_DÉPART_MINIMAL, ANGLE_DÉPLACEMENT_DÉPART_MAXIMAL);
             VecteurUnitaireDéplacementMAJ = new Vector2((float)Math.Cos(MathHelper.ToRadians(AngleDéplacement)), (float)Math.Sin(MathHelper.ToRadians(AngleDéplacement)));
+            TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
         }
 
         /// <summary>

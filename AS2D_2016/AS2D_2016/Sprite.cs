@@ -31,7 +31,7 @@ namespace AtelierXNA
         protected Vector2 Position { get; set; }
         protected Rectangle ZoneAffichage { get; set; }
         protected SpriteBatch GestionSprites { get; set; }
-        RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
+        protected RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         /* probably private */ protected Texture2D Image { get; set; }
         protected float Échelle { get; set; }
         //Vector2 Origine { get; set; }

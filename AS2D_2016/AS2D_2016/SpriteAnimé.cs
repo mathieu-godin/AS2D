@@ -65,7 +65,7 @@ namespace AtelierXNA
             RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             Delta = new Vector2(Image.Width, Image.Height) / DescriptionImage;
             ADétruire = false;
-            TempsÉcouléDepuisMAJAnimation = 0;
+            TempsÉcouléDepuisMAJAnimation = AUCUN_TEMPS_ÉCOULÉ;
             //Rangé = 0;
 
 
