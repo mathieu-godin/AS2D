@@ -89,6 +89,10 @@ namespace AtelierXNA
         {
             base.Update(gameTime);
 
+            //Ajout pr missile
+            if (GestionInput.EstNouvelleTouche(Keys.Space))
+                LancerMissile();
+
             float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
             TempsÉcouléDepuisMAJ += TempsÉcoulé;
             if (TempsÉcouléDepuisMAJ >= IntervalleMAJDéplacement)
@@ -148,5 +152,23 @@ namespace AtelierXNA
         //    GestionSprites.Draw(Image, new Rectangle((int)Position.X, (int)Position.Y, (int)(Delta.X*Échelle), (int)(Delta.Y*Échelle)),
         //                        RectangleSource, Color.White);
         //}
+
+        void LancerMissile()
+        {
+            int nbreDeMissiles = (Game.Components.Where(composant => composant is Missile && !((Missile)composant).ADétruire)).ToList().Count();
+
+            if(nbreDeMissiles < 3)
+            {
+                Game.Components.Add(new Missile(Game,
+                                                "Missile",
+                                                new Vector2(DestinationRectangle.X + DestinationRectangle.Width/2 - 4, DestinationRectangle.Y - DestinationRectangle.Height/4),
+                                                new Rectangle(0, 0, 30, 40),
+                                                new Vector2(25, 1),
+                                                "Explosion",
+                                                new Vector2(5, 4),
+                                                1.5f * Atelier.INTERVALLE_STANDARDS,
+                                                Atelier.INTERVALLE_STANDARDS));
+            }
+        }
     }
 }
