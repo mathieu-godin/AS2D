@@ -43,7 +43,6 @@ namespace AtelierXNA
         SpriteAnimé Explosion { get; set; }
         //bool ExplosionTerminée { get; set; }
 
-        public bool ExplosionActivée { get; set; }
 
         /// <summary>
         /// Constructeur de Sphère
@@ -159,12 +158,6 @@ namespace AtelierXNA
                     //ExplosionTerminée = true;
                 }
             }
-
-        }
-
-        public void ActiverExplosion()
-        {
-
         }
     }
 }
