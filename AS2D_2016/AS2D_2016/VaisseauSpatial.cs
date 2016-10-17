@@ -68,10 +68,13 @@ namespace AtelierXNA
             base.Initialize();
 
             Missiles = new List<Missile>();
-
+            Position = new Vector2(Position.X - DestinationRectangle.Width/2,
+                                   Game.Window.ClientBounds.Height - DestinationRectangle.Height);
             Temps…coulÈDepuisMAJ = 0;
             AnimationSelonLeDÈplacement = 0;
             AnciennePosition = new Vector2(Position.X, Position.Y);
+
+            
         }
 
         protected override void LoadContent()
