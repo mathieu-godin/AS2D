@@ -125,7 +125,7 @@ namespace AtelierXNA
         /// </summary>
         public void ActiverExplosion()
         {
-            
+            ADétruire = true;//LIGNE ESSENTIELLE!!!
         }
 
         /// <summary>
