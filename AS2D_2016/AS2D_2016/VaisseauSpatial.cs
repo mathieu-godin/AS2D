@@ -34,6 +34,7 @@ namespace AtelierXNA
         float TempsÉcouléDepuisMAJ { get; set; }
         int AnimationSelonLeDéplacement { get; set; }
         Vector2 AnciennePosition { get; set; }
+        List<Missile> Missiles { get; set; }
 
         //Propriété initialement gérée par LoadContent
         InputManager GestionInput { get; set; }
@@ -65,6 +66,8 @@ namespace AtelierXNA
         public override void Initialize()
         {
             base.Initialize();
+
+            Missiles = new List<Missile>();
 
             TempsÉcouléDepuisMAJ = 0;
             AnimationSelonLeDéplacement = 0;
@@ -111,6 +114,9 @@ namespace AtelierXNA
             DéplacementRésultant = Position - AnciennePosition;
 
             AnimationSelonLeDéplacement = (SeDéplace()? SE_DÉPLACE : NE_SE_DÉPLACE_PAS);
+
+            EnleverMissiles();
+
         }
 
         void GérerClavier()
@@ -159,7 +165,7 @@ namespace AtelierXNA
 
             if(nbreDeMissiles < 3)
             {
-                Game.Components.Add(new Missile(Game,
+                Missile missile = new Missile(Game,
                                                 "Missile",
                                                 new Vector2(DestinationRectangle.X + DestinationRectangle.Width/2 - 4, DestinationRectangle.Y - DestinationRectangle.Height/4),
                                                 new Rectangle(0, 0, 30, 40),
@@ -167,7 +173,20 @@ namespace AtelierXNA
                                                 "Explosion",
                                                 new Vector2(5, 4),
                                                 1.5f * Atelier.INTERVALLE_STANDARDS,
-                                                Atelier.INTERVALLE_STANDARDS));
+                                                Atelier.INTERVALLE_STANDARDS);
+                Game.Components.Add(missile);
+                Missiles.Add(missile);
+            }
+        }
+
+        void EnleverMissiles()
+        {
+            foreach(Missile missile in Missiles)
+            {
+                if (missile.ADétruire)
+                {
+                    Game.Components.Remove(missile);
+                }
             }
         }
     }
