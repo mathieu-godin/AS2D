@@ -34,7 +34,6 @@ namespace AtelierXNA
         float TempsÉcouléDepuisMAJ { get; set; }
         int AnimationSelonLeDéplacement { get; set; }
         Vector2 AnciennePosition { get; set; }
-        List<Missile> Missiles { get; set; }
 
         //Propriété initialement gérée par LoadContent
         InputManager GestionInput { get; set; }
@@ -67,7 +66,6 @@ namespace AtelierXNA
         {
             base.Initialize();
 
-            Missiles = new List<Missile>();
             Position = new Vector2(Position.X - DestinationRectangle.Width/2,
                                    Game.Window.ClientBounds.Height - DestinationRectangle.Height);
             TempsÉcouléDepuisMAJ = 0;
@@ -118,7 +116,6 @@ namespace AtelierXNA
 
             AnimationSelonLeDéplacement = (SeDéplace()? SE_DÉPLACE : NE_SE_DÉPLACE_PAS);
 
-            EnleverMissiles();
 
         }
 
@@ -178,19 +175,8 @@ namespace AtelierXNA
                                                 1.5f * Atelier.INTERVALLE_STANDARDS,
                                                 Atelier.INTERVALLE_STANDARDS);
                 Game.Components.Add(missile);
-                Missiles.Add(missile);
             }
         }
 
-        void EnleverMissiles()
-        {
-            foreach(Missile missile in Missiles)
-            {
-                if (missile.ADétruire)
-                {
-                    Game.Components.Remove(missile);
-                }
-            }
-        }
     }
 }
