@@ -128,6 +128,8 @@ namespace AtelierXNA
             }*/
         }
 
+        
+
         /// <summary>
         /// Appelé quand le missile doit être explosé
         /// </summary>
