@@ -161,7 +161,7 @@ namespace AtelierXNA
 
         void LancerMissile()
         {
-            int nbreDeMissiles = (Game.Components.Where(composant => composant is Missile && !((Missile)composant).ADétruire)).ToList().Count();
+            int nbreDeMissiles = (Game.Components.Where(composant => composant is Missile && !((Missile)composant).ADétruire && ((Missile)composant).Visible).Count());
 
             if(nbreDeMissiles < 3)
             {
