@@ -40,7 +40,7 @@ namespace AtelierXNA
         public bool ExplosionActivée { get; private set; }
         float TempsÉcouléDepuisMAJExplosion { get; set; }
         int PhaseExplosion { get; set; }
-        SpriteAnimé Explosion { get; set; }
+        public SpriteAnimé Explosion { get; private set; }
         Vector2 VecteurDéplacementMAJ { get; set; }
         //bool ExplosionTerminée { get; set; }
 
@@ -97,6 +97,10 @@ namespace AtelierXNA
                 EffectuerMiseÀJourDéplacement(gameTime);
                 TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
             }
+            if (ExplosionActivée)
+            {
+                GérerExplosion(gameTime);
+            }
         }
 
         /// <summary>
@@ -109,7 +113,7 @@ namespace AtelierXNA
             if (Position.Y <= MargeHaut && !ExplosionActivée /*&& !ExplosionTerminée*/)
             {
                 ActiverExplosionMissile();
-                GérerExplosion(gameTime);
+                //GérerExplosion(gameTime);
                 ADétruire = true;
             }
             /*if (ExplosionTerminée)
@@ -130,6 +134,7 @@ namespace AtelierXNA
         public void ActiverExplosion()
         {
             ADétruire = true;//LIGNE ESSENTIELLE!!!
+
         }
 
         /// <summary>
