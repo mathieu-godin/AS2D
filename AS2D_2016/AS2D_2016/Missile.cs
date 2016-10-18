@@ -30,7 +30,7 @@ namespace AtelierXNA
     /// </summary>
     public class Missile : SpriteAnimé
     {
-        const float INTERVALLE_ANIMATION_LENT = 6 * Atelier.INTERVALLE_STANDARDS;
+        const float INTERVALLE_ANIMATION_LENT = 6 * Atelier.INTERVALLE_STANDARDS, CHANGEMENT_INTERVALLE_POUR_ACCÉLÉRATION = 0.00015F, DÉPLACEMENT_ORDONNÉE_MAJ = 4.0F;
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
         string NomImageExplosion { get; set; }
@@ -41,6 +41,7 @@ namespace AtelierXNA
         float TempsÉcouléDepuisMAJExplosion { get; set; }
         int PhaseExplosion { get; set; }
         SpriteAnimé Explosion { get; set; }
+        Vector2 VecteurDéplacementMAJ { get; set; }
         //bool ExplosionTerminée { get; set; }
 
 
@@ -71,6 +72,7 @@ namespace AtelierXNA
             TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
             ExplosionActivée = false;
             //ExplosionTerminée = false;
+            VecteurDéplacementMAJ = new Vector2(ABSCISSE_NULLE, DÉPLACEMENT_ORDONNÉE_MAJ);
         }
 
         /// <summary>
@@ -102,11 +104,13 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void EffectuerMiseÀJourDéplacement(GameTime gameTime)
         {
-            Position -= Vector2.UnitY;
+            Position -= VecteurDéplacementMAJ;
+            IntervalleMAJDéplacement -= CHANGEMENT_INTERVALLE_POUR_ACCÉLÉRATION;
             if (Position.Y <= MargeHaut && !ExplosionActivée /*&& !ExplosionTerminée*/)
             {
                 ActiverExplosionMissile();
                 GérerExplosion(gameTime);
+                ADétruire = true;
             }
             /*if (ExplosionTerminée)
             {
