@@ -2,7 +2,7 @@
 SpriteAnimé.cs
 --------------
 
-Par Mathieu Godin
+Par Mathieu Godin et Raphaël Brûlé
 
 Rôle : Composant qui hérite de Sprite et qui 
        permet d'animer le sprite qui sera
