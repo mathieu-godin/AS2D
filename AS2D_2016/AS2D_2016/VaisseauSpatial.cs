@@ -91,9 +91,9 @@ namespace AtelierXNA
 
         protected override void EffectuerMise¿JourAnimation()
         {
-            RectangleSource = new Rectangle((RectangleSource.X + (int)DimensionsImage¿LAffichage.X) % Image.Width,
-                             (int)DimensionsImage¿LAffichage.Y *AnimationSelonLeDÈplacement,
-                             (int)DimensionsImage¿LAffichage.X, (int)DimensionsImage¿LAffichage.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width,
+                             (int)Delta.Y * AnimationSelonLeDÈplacement,
+                             (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)
@@ -130,12 +130,12 @@ namespace AtelierXNA
         /// <param name="gameTime">Contient les informations de temps de jeu</param>
         void GÈrerDescenteDuVaisseau()
         {
-                Position += VecteurDÈplacementDescente;
-                if (Position.Y >= OrdonnÈeFinaleVaisseau)
-                {
-                    Position = new Vector2(Position.X, OrdonnÈeFinaleVaisseau);
-                    EnDescente = false;
-                }
+            Position += VecteurDÈplacementDescente;
+            if (Position.Y >= OrdonnÈeFinaleVaisseau)
+            {
+                Position = new Vector2(Position.X, OrdonnÈeFinaleVaisseau);
+                EnDescente = false;
+            }
         }
 
 
@@ -143,12 +143,12 @@ namespace AtelierXNA
         void EffectuerMise¿JourDÈplacement()
         {
             AnciennePosition = new Vector2(Position.X, Position.Y);
-            
+
             GÈrerClavier();
 
             DÈplacementRÈsultant = Position - AnciennePosition;
 
-            AnimationSelonLeDÈplacement = (SeDÈplace()? SE_D…PLACE : NE_SE_D…PLACE_PAS);
+            AnimationSelonLeDÈplacement = (SeDÈplace() ? SE_D…PLACE : NE_SE_D…PLACE_PAS);
 
 
         }
@@ -197,11 +197,11 @@ namespace AtelierXNA
         {
             int nbreDeMissiles = (Game.Components.Where(composant => composant is Missile && !((Missile)composant).ADÈtruire && ((Missile)composant).Visible).Count());
 
-            if(nbreDeMissiles < 3)
+            if (nbreDeMissiles < 3)
             {
                 Missile missile = new Missile(Game,
                                                 "Missile",
-                                                new Vector2(RectangleDimensionsImage¿L…chelle.X + RectangleDimensionsImage¿L…chelle.Width/2 - 4, RectangleDimensionsImage¿L…chelle.Y - RectangleDimensionsImage¿L…chelle.Height/4),
+                                                new Vector2(RectangleDimensionsImage¿L…chelle.X + RectangleDimensionsImage¿L…chelle.Width / 2 - 4, RectangleDimensionsImage¿L…chelle.Y - RectangleDimensionsImage¿L…chelle.Height / 4),
                                                 new Rectangle(0, 0, 30, 40),
                                                 new Vector2(25, 1),
                                                 "Explosion",

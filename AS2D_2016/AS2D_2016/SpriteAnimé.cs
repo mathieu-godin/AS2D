@@ -23,19 +23,19 @@ namespace AtelierXNA
     public class SpriteAnimé : Sprite, IDestructible
     {
         //Constantes
-        protected const int AUCUN_TEMPS_ÉCOULÉ = 0, AUCUN_DÉPLACEMENT = 0;
+        protected const int AUCUN_TEMPS_ÉCOULÉ = 0, AUCUN_DÉPLACEMENT = 0, ORIGINE = 0;
 
         //Propriétés initialement gérées par le constructeur
         Vector2 DescriptionImage { get; set; }
         protected float IntervalleMAJAnnimation { get; set; }
 
         //Propriétés initialement gérées par Initialize
+        protected Rectangle RectangleSource { get; set; }
         public bool ADétruire { get; set; }
         float TempsÉcouléDepuisMAJAnimation { get; set; }
         //int Rangé { get; set; }
         //int VariableÀChangerDeNom { get; set; }
-
-
+        protected Vector2 Delta { get; set; }
 
         /// <summary>
         /// Constructeur de la classe SpriteAnimé
@@ -58,43 +58,37 @@ namespace AtelierXNA
         /// </summary>
         public override void Initialize()
         {
-            base.Initialize();
             LoadContent();
-            DimensionsImageÀLAffichage = new Vector2(Image.Width, Image.Height) / DescriptionImage;
+            Delta = CalculerDimensionsSpriteOriginal();
+            RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             ADétruire = false;
             TempsÉcouléDepuisMAJAnimation = AUCUN_TEMPS_ÉCOULÉ;
-            //Rangé = 0;
-
-
-            Échelle = CalculerÉchelle();
-
-            
-            
+            base.Initialize();
         }
 
         /// <summary>
-        /// Créer rectangle source
+        /// Calcule les dimensions du sprite tel qu'on le voit dans son fichier
         /// </summary>
-        /// <returns>Retourne le rectangle en question</returns>
-        protected override Rectangle CréerRectangleSource()
+        /// <returns>Retourne le vecteur de type Vector2 de ses dimensions</returns>
+        protected override Vector2 CalculerDimensionsSpriteOriginal()
         {
-            return new Rectangle(ORIGINE, ORIGINE, (int)DimensionsImageÀLAffichage.X, (int)DimensionsImageÀLAffichage.Y);
+            return base.CalculerDimensionsSpriteOriginal() / DescriptionImage;
         }
 
         /// <summary>
-        /// Céer le rectangle des bonnes dimmensions à l'échelle et position d'affichage
+        /// Calcule l'échelle horizontale du sprite pour la méthode Draw()
         /// </summary>
-        /// <returns>Retourne le rectangle en question</returns>
-        protected override Rectangle CréerRectangleDimensionsImageÀLÉchelle()
+        protected override float CalculerÉchelleHorizontale()
         {
-            return new Rectangle((int)Position.X, (int)Position.Y, (int)(DimensionsImageÀLAffichage.X * Échelle), (int)(DimensionsImageÀLAffichage.Y * Échelle));
+            return ZoneAffichage.Width / Delta.X;
         }
 
-        protected override float CalculerÉchelle()
+        /// <summary>
+        /// Calcule l'échelle verticale du sprite pour la méthode Draw()
+        /// </summary>
+        protected override float CalculerÉchelleVerticale()
         {
-            float échelleHorizontale = ZoneAffichage.Width / DimensionsImageÀLAffichage.X, échelleVerticale = ZoneAffichage.Height / DimensionsImageÀLAffichage.Y;
-
-            return échelleHorizontale < échelleVerticale ? échelleHorizontale : échelleVerticale;
+            return ZoneAffichage.Height / Delta.Y;
         }
 
         /// <summary>
@@ -102,23 +96,12 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void EffectuerMiseÀJourAnimation()
         {
-            //if(Rangé == DescriptionImage.Y)
-            //    Rangé = 0;
-
-            //VariableÀChangerDeNom = (RectangleSource.X + (int)Delta.X) % Image.Width;
-
-            //RectangleSource = new Rectangle(VariableÀChangerDeNom,
-            //                       (int)Delta.Y * Rangé, (int)Delta.X, (int)Delta.Y);
-
-            //if(VariableÀChangerDeNom == DescriptionImage.X - 1)
-            //    ++Rangé;
-            RectangleSource = new Rectangle((RectangleSource.X + (int)DimensionsImageÀLAffichage.X) % Image.Width, RectangleSource.X >= Image.Width - (int)DimensionsImageÀLAffichage.X ? (RectangleSource.Y >= Image.Height - (int)DimensionsImageÀLAffichage.Y ? ORIGINE : RectangleSource.Y + (int)DimensionsImageÀLAffichage.Y) : RectangleSource.Y, (int)DimensionsImageÀLAffichage.X, (int)DimensionsImageÀLAffichage.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X >= Image.Width - (int)Delta.X ? (RectangleSource.Y >= Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)
         {
-            //ADétruire = EstEnCollision(this); LIGNE PAS BONNE À CHANGER
-            CréerRectangleDimensionsImageÀLÉchelle();
+            RectangleDimensionsImageÀLÉchelle = CalculerRectangleDimensionsImageÀLÉchelle();
 
             TempsÉcouléDepuisMAJAnimation += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJAnimation >= IntervalleMAJAnnimation)
@@ -128,6 +111,14 @@ namespace AtelierXNA
             }
         }
 
+        /// <summary>
+        /// Méthode qui dessine le SpriteAnimé à l'écran
+        /// </summary>
+        /// <param name="gameTime">Objet contenant l'information de temps de jeu de type GameTime</param>
+        public override void Draw(GameTime gameTime)
+        {
+            GestionSprites.Draw(Image, RectangleDimensionsImageÀLÉchelle, RectangleSource, Color.White);
+        }
 
         /// <summary>
         /// Prédicat vrai si le Sprite est en collision avec un autre objet
@@ -136,27 +127,9 @@ namespace AtelierXNA
         /// <returns></returns>
         public override bool EstEnCollision(object autreObjet)
         {
-            //SpriteAnimé autreSprite = (SpriteAnimé)autreObjet;
-            //Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImageÀLÉchelle, autreSprite.RectangleDimensionsImageÀLÉchelle);
-            //bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
-
-            //ADétruire = collision;
-            //autreSprite.ADétruire = collision;
-
-            //return collision;
-
             Rectangle autreRectangle = ((SpriteAnimé)autreObjet).RectangleDimensionsImageÀLÉchelle;
 
             return RectangleDimensionsImageÀLÉchelle.Intersects(autreRectangle);
-        }
-
-        /// <summary>
-        /// Calcule les marges du SpriteAnimé
-        /// </summary>
-        protected override void CalculerMarges()
-        {
-            MargeDroite = Game.Window.ClientBounds.Width - RectangleDimensionsImageÀLÉchelle.Width;
-            MargeBas = Game.Window.ClientBounds.Height - RectangleDimensionsImageÀLÉchelle.Height;
         }
     }
 }

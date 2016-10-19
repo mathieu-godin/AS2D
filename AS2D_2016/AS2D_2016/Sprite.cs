@@ -11,8 +11,6 @@ RÙle : Composant qui est un DrawableGameComponent et
 CrÈÈ : 5 octobre 2016
 ModifiÈ : 12 octobre 2016
 Description : Affiche maintenant ‡ l'Èchelle et EstEnCollision a ÈtÈ implantÈ
-
-Co-auteur : RaphaÎl BrulÈ
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,25 +23,22 @@ namespace AtelierXNA
     /// </summary>
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollisionable
     {
-        protected const int ORDONN…E_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2, ORIGINE = 0;
+        protected const int ORDONN…E_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
 
-        //PropriÈtÈs initialement gÈrÈes par le constructeur
         string NomImage { get; set; }
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get; protected set; }
         protected Rectangle ZoneAffichage { get; set; }
-
-        protected Rectangle RectangleSource { get; set; }
-        protected Vector2 DimensionsImage¿LAffichage { get; set; }
         protected SpriteBatch GestionSprites { get; set; }
         protected RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
-        /* probably private */ protected Texture2D Image { get; set; }
-        protected float …chelle { get; set; }
-        //Vector2 Origine { get; set; }
+        /* probably private */
+        protected Texture2D Image { get; set; }
+        float …chelle { get; set; }
         protected Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
         protected int MargeDroite { get; set; }
         protected int MargeBas { get; set; }
         protected int MargeGauche { get; set; }
         protected int MargeHaut { get; set; }
+        Vector2 DimensionsSprite¿Afficher { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Sprite
@@ -65,43 +60,65 @@ namespace AtelierXNA
         public override void Initialize()
         {
             base.Initialize();
-            DimensionsImage¿LAffichage = new Vector2(Image.Width, Image.Height);
-            RectangleSource = CrÈerRectangleSource();
             …chelle = Calculer…chelle();
+            DimensionsSprite¿Afficher = CalculerDimensionsSprite¿Afficher();
             //Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
-            RectangleDimensionsImage¿L…chelle = CrÈerRectangleDimensionsImage¿L…chelle();
-            MargeHaut = HAUTEUR_NULLE;
-            MargeGauche = LARGEUR_NULLE;
+            RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
+            CalculerMarges();
         }
 
         /// <summary>
-        /// CrÈer rectangle source
+        /// Calcule le rectangle reprÈsentant ce qui va Ítre affichÈ
         /// </summary>
-        /// <returns>Retourne le rectangle en question</returns>
-        protected virtual Rectangle CrÈerRectangleSource()
+        /// <returns>Le rectangle de type Rectangle reprÈsentant le pourtour de ce qui sera affichÈ</returns>
+        protected Rectangle CalculerRectangleDimensionsImage¿L…chelle()
         {
-            return new Rectangle(ORIGINE, ORIGINE, (int)DimensionsImage¿LAffichage.X, (int)DimensionsImage¿LAffichage.Y);
+            return new Rectangle((int)Position.X, (int)Position.Y, (int)(DimensionsSprite¿Afficher.X), (int)(DimensionsSprite¿Afficher.Y));
         }
 
         /// <summary>
-        /// CÈer le rectangle des bonnes dimmensions ‡ l'Èchelle et position d'affichage
+        /// Calcule les dimensions du sprite tel qu'il sera affichÈ
         /// </summary>
-        /// <returns>Retourne le rectangle en question</returns>
-        protected virtual Rectangle CrÈerRectangleDimensionsImage¿L…chelle()
+        /// <returns>Un vecteur de type Vector2 reprÈsentant les dimensions de ce qui sera affichÈ</returns>
+        Vector2 CalculerDimensionsSprite¿Afficher()
         {
-            return new Rectangle((int)Position.X, (int)Position.Y, (int)(DimensionsImage¿LAffichage.X * …chelle), (int)(DimensionsImage¿LAffichage.Y * …chelle));
+            return new Vector2(…chelle, …chelle) * CalculerDimensionsSpriteOriginal();
+        }
+
+        /// <summary>
+        /// Calcule les dimensions du sprite tel qu'on le voit dans son fichier
+        /// </summary>
+        /// <returns>Retourne le vecteur de type Vector2 de ses dimensions</returns>
+        protected virtual Vector2 CalculerDimensionsSpriteOriginal()
+        {
+            return new Vector2(Image.Width, Image.Height);
         }
 
         /// <summary>
         /// Calcule l'Èchelle en calculant l'Èchelle horizontale et verticale et prenant la plus petite des deux
         /// </summary>
         /// <returns>La plus petite des Èchelles horizontales et verticales</returns>
-        protected virtual float Calculer…chelle()
+        protected float Calculer…chelle()
         {
-            //Rajout de cast de float car sinon ca fesait une division entiËre qui donnait tj 0! Mais anyway cest pas bon mais bon, va voir le remix dans SpriteAnimÈ LOL.
-            float ÈchelleHorizontale = ZoneAffichage.Width / (float)Image.Width, ÈchelleVerticale = ZoneAffichage.Height / (float)Image.Height;
+            float ÈchelleHorizontale = Calculer…chelleHorizontale(), ÈchelleVerticale = Calculer…chelleVerticale();
 
             return ÈchelleHorizontale < ÈchelleVerticale ? ÈchelleHorizontale : ÈchelleVerticale;
+        }
+
+        /// <summary>
+        /// Calcule l'Èchelle horizontale du sprite pour la mÈthode Draw()
+        /// </summary>
+        protected virtual float Calculer…chelleHorizontale()
+        {
+            return ZoneAffichage.Width / (float)Image.Width;
+        }
+
+        /// <summary>
+        /// Calcule l'Èchelle verticale du sprite pour la mÈthode Draw()
+        /// </summary>
+        protected virtual float Calculer…chelleVerticale()
+        {
+            return ZoneAffichage.Height / (float)Image.Height;
         }
 
         /// <summary>
@@ -112,16 +129,17 @@ namespace AtelierXNA
             GestionSprites = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
             GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
             Image = GestionnaireDeTextures.Find(NomImage);
-            CalculerMarges();
         }
 
         /// <summary>
-        /// MÈthode qui dessine le SpriteAnimÈ ‡ l'Ècran
+        /// MÈthode qui dessine le Sprite ‡ l'Ècran
         /// </summary>
-        /// <param name="gameTime">Objet contenant l'information de temps de jeu de type GameTime</param>
+        /// <param name="gameTime">Contient les informations sur le temps de jeu</param>
         public override void Draw(GameTime gameTime)
         {
-            GestionSprites.Draw(Image, RectangleDimensionsImage¿L…chelle, RectangleSource, Color.White);
+            //GestionSprites.Draw(Image, Position, ZoneAffichage, Color.White, AUCUNE_ROTATION, Origine, …chelle, SpriteEffects.None, AUCUNE_COUCHE_DE_PROFONDEUR);
+
+            GestionSprites.Draw(Image, RectangleDimensionsImage¿L…chelle, Color.White);
         }
 
         /// <summary>
@@ -153,8 +171,8 @@ namespace AtelierXNA
         {
             MargeDroite = Game.Window.ClientBounds.Width - RectangleDimensionsImage¿L…chelle.Width;
             MargeBas = Game.Window.ClientBounds.Height - RectangleDimensionsImage¿L…chelle.Height;
+            MargeHaut = HAUTEUR_NULLE;
+            MargeGauche = LARGEUR_NULLE;
         }
-
-
     }
 }
