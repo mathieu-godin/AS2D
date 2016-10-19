@@ -146,7 +146,7 @@ namespace AtelierXNA
         /// Gère l'explosion du missile
         /// </summary>
         /// <param name="gameTime">Contient les informations de temps de jeu</param>
-        private void GérerExplosion(GameTime gameTime)
+        void GérerExplosion(GameTime gameTime)
         {
             TempsÉcouléDepuisMAJExplosion += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJExplosion >= INTERVALLE_ANIMATION_LENT)

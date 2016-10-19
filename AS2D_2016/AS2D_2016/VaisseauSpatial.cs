@@ -4,6 +4,8 @@
    Description :       Ce component, enfant de SpriteAnimé, permet
                        de gérer le vaisseau spatial.*/
 
+// Modification : Modifications pour la descente du vaisceau au début
+//                Mathieu Godin
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +27,7 @@ namespace AtelierXNA
         //Constante
         const int NE_SE_DÉPLACE_PAS = 0;
         const int SE_DÉPLACE = 1;
-        const int NB_PIXELS_DE_DÉPLACEMENT = 5;
+        const int NB_PIXELS_DE_DÉPLACEMENT = 4; // Je l'ai changé de 5 à 4 car ça ressemblait plus à l'exemple d'exécution
 
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
@@ -40,6 +42,10 @@ namespace AtelierXNA
 
         //à voir
         Vector2 DéplacementRésultant { get; set; }
+        // Ajouté par Mathieu Godin pour la descente du vaisseau
+        int OrdonnéeFinaleVaisseau { get; set; }
+        bool EnDescente { get; set; }
+        Vector2 VecteurDéplacementDescente { get; set; } // D'autres similaires pourraient être utilisés dans le reste de la classe pour optimiser
 
 
         /// <summary>
@@ -66,13 +72,14 @@ namespace AtelierXNA
         {
             base.Initialize();
 
-            Position = new Vector2(Position.X - DestinationRectangle.Width/2,
-                                   Game.Window.ClientBounds.Height - DestinationRectangle.Height);
+            //À effacer avec la descente du vaisseau maintenant : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
+            Position = new Vector2(Position.X - DestinationRectangle.Width / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - DestinationRectangle.Height / DIVISEUR_OBTENTION_DEMI_GRANDEUR); // Nouvelle ligne
             TempsÉcouléDepuisMAJ = 0;
             AnimationSelonLeDéplacement = 0;
             AnciennePosition = new Vector2(Position.X, Position.Y);
-
-            
+            OrdonnéeFinaleVaisseau = Game.Window.ClientBounds.Height - DestinationRectangle.Height; // Nouvelle ligne
+            EnDescente = true; // Nouvelle ligne
+            VecteurDéplacementDescente = new Vector2(AUCUN_DÉPLACEMENT, NB_PIXELS_DE_DÉPLACEMENT);
         }
 
         protected override void LoadContent()
@@ -92,7 +99,6 @@ namespace AtelierXNA
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
             //Ajout pr missile
             if (GestionInput.EstNouvelleTouche(Keys.Space))
                 LancerMissile();
@@ -101,10 +107,38 @@ namespace AtelierXNA
             TempsÉcouléDepuisMAJ += TempsÉcoulé;
             if (TempsÉcouléDepuisMAJ >= IntervalleMAJDéplacement)
             {
+                DéterminerSiVaisseauEnDescente(); // Nouvelle méthode
                 EffectuerMiseÀJourDéplacement();
-                TempsÉcouléDepuisMAJ = 0;
+                TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
             }
         }
+
+        /// <summary>
+        /// Détermine si on est au début de la partie avec le vaisseau en descente pour aller le descendre si c'est le cas
+        /// </summary>
+        void DéterminerSiVaisseauEnDescente()
+        {
+            if (EnDescente)
+            {
+                GérerDescenteDuVaisseau(); // Nouvelle méthode
+            }
+        }
+
+        /// <summary>
+        /// Gère la descente du vaisseau au début de la partie
+        /// </summary>
+        /// <param name="gameTime">Contient les informations de temps de jeu</param>
+        void GérerDescenteDuVaisseau()
+        {
+                Position += VecteurDéplacementDescente;
+                if (Position.Y >= OrdonnéeFinaleVaisseau)
+                {
+                    Position = new Vector2(Position.X, OrdonnéeFinaleVaisseau);
+                    EnDescente = false;
+                }
+        }
+
+
 
         void EffectuerMiseÀJourDéplacement()
         {
