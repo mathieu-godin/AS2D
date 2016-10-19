@@ -11,6 +11,8 @@ Rôle : Composant qui est un DrawableGameComponent et
 Créé : 5 octobre 2016
 Modifié : 12 octobre 2016
 Description : Affiche maintenant à l'échelle et EstEnCollision a été implanté
+
+Co-auteur : Raphaël Brulé
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,13 +25,15 @@ namespace AtelierXNA
     /// </summary>
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollisionable
     {
-        //const float AUCUNE_COUCHE_DE_PROFONDEUR = 0.0F;
-        //const float AUCUNE_ROTATION = 0.0F;
-        protected const int ORDONNÉE_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
+        protected const int ORDONNÉE_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2, ORIGINE = 0;
 
+        //Propriétés initialement gérées par le constructeur
         string NomImage { get; set; }
-        public Vector2 Position { get; protected set; }
+        public Vector2 Position { get; private set; }
         protected Rectangle ZoneAffichage { get; set; }
+
+        protected Rectangle RectangleSource { get; set; }
+        protected Vector2 DimensionsImageÀLAffichage { get; set; }
         protected SpriteBatch GestionSprites { get; set; }
         protected RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         /* probably private */ protected Texture2D Image { get; set; }
@@ -61,11 +65,31 @@ namespace AtelierXNA
         public override void Initialize()
         {
             base.Initialize();
+            DimensionsImageÀLAffichage = new Vector2(Image.Width, Image.Height);
+            RectangleSource = CréerRectangleSource();
             Échelle = CalculerÉchelle();
             //Origine = new Vector2(ABSCISSE_NULLE, ORDONNÉE_NULLE);
-            RectangleDimensionsImageÀLÉchelle = new Rectangle((int)Position.X, (int)Position.Y, (int)(Image.Width * Échelle), (int)(Image.Height * Échelle));
+            RectangleDimensionsImageÀLÉchelle = CréerRectangleDimensionsImageÀLÉchelle();
             MargeHaut = HAUTEUR_NULLE;
             MargeGauche = LARGEUR_NULLE;
+        }
+
+        /// <summary>
+        /// Créer rectangle source
+        /// </summary>
+        /// <returns>Retourne le rectangle en question</returns>
+        protected virtual Rectangle CréerRectangleSource()
+        {
+            return new Rectangle(ORIGINE, ORIGINE, (int)DimensionsImageÀLAffichage.X, (int)DimensionsImageÀLAffichage.Y);
+        }
+
+        /// <summary>
+        /// Céer le rectangle des bonnes dimmensions à l'échelle et position d'affichage
+        /// </summary>
+        /// <returns>Retourne le rectangle en question</returns>
+        protected virtual Rectangle CréerRectangleDimensionsImageÀLÉchelle()
+        {
+            return new Rectangle((int)Position.X, (int)Position.Y, (int)(DimensionsImageÀLAffichage.X * Échelle), (int)(DimensionsImageÀLAffichage.Y * Échelle));
         }
 
         /// <summary>
@@ -92,14 +116,12 @@ namespace AtelierXNA
         }
 
         /// <summary>
-        /// Méthode qui dessine le Sprite à l'écran
+        /// Méthode qui dessine le SpriteAnimé à l'écran
         /// </summary>
-        /// <param name="gameTime">Contient les informations sur le temps de jeu</param>
+        /// <param name="gameTime">Objet contenant l'information de temps de jeu de type GameTime</param>
         public override void Draw(GameTime gameTime)
         {
-            //GestionSprites.Draw(Image, Position, ZoneAffichage, Color.White, AUCUNE_ROTATION, Origine, Échelle, SpriteEffects.None, AUCUNE_COUCHE_DE_PROFONDEUR);
-
-            GestionSprites.Draw(Image, RectangleDimensionsImageÀLÉchelle, Color.White);
+            GestionSprites.Draw(Image, RectangleDimensionsImageÀLÉchelle, RectangleSource, Color.White);
         }
 
         /// <summary>
@@ -132,5 +154,7 @@ namespace AtelierXNA
             MargeDroite = Game.Window.ClientBounds.Width - RectangleDimensionsImageÀLÉchelle.Width;
             MargeBas = Game.Window.ClientBounds.Height - RectangleDimensionsImageÀLÉchelle.Height;
         }
+
+
     }
 }

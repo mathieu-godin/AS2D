@@ -73,11 +73,11 @@ namespace AtelierXNA
             base.Initialize();
 
             //¿ effacer avec la descente du vaisseau maintenant : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
-            Position = new Vector2(Position.X - DestinationRectangle.Width / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - DestinationRectangle.Height / DIVISEUR_OBTENTION_DEMI_GRANDEUR); // Nouvelle ligne
+            Position = new Vector2(Position.X - RectangleDimensionsImage¿L…chelle.Width / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - RectangleDimensionsImage¿L…chelle.Height / DIVISEUR_OBTENTION_DEMI_GRANDEUR); // Nouvelle ligne
             Temps…coulÈDepuisMAJ = 0;
             AnimationSelonLeDÈplacement = 0;
             AnciennePosition = new Vector2(Position.X, Position.Y);
-            OrdonnÈeFinaleVaisseau = Game.Window.ClientBounds.Height - DestinationRectangle.Height; // Nouvelle ligne
+            OrdonnÈeFinaleVaisseau = Game.Window.ClientBounds.Height - RectangleDimensionsImage¿L…chelle.Height; // Nouvelle ligne
             EnDescente = true; // Nouvelle ligne
             VecteurDÈplacementDescente = new Vector2(AUCUN_D…PLACEMENT, NB_PIXELS_DE_D…PLACEMENT);
         }
@@ -91,9 +91,9 @@ namespace AtelierXNA
 
         protected override void EffectuerMise¿JourAnimation()
         {
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width,
-                             (int)Delta.Y *AnimationSelonLeDÈplacement,
-                             (int)Delta.X, (int)Delta.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)DimensionsImage¿LAffichage.X) % Image.Width,
+                             (int)DimensionsImage¿LAffichage.Y *AnimationSelonLeDÈplacement,
+                             (int)DimensionsImage¿LAffichage.X, (int)DimensionsImage¿LAffichage.Y);
         }
 
         public override void Update(GameTime gameTime)
@@ -201,7 +201,7 @@ namespace AtelierXNA
             {
                 Missile missile = new Missile(Game,
                                                 "Missile",
-                                                new Vector2(DestinationRectangle.X + DestinationRectangle.Width/2 - 4, DestinationRectangle.Y - DestinationRectangle.Height/4),
+                                                new Vector2(RectangleDimensionsImage¿L…chelle.X + RectangleDimensionsImage¿L…chelle.Width/2 - 4, RectangleDimensionsImage¿L…chelle.Y - RectangleDimensionsImage¿L…chelle.Height/4),
                                                 new Rectangle(0, 0, 30, 40),
                                                 new Vector2(25, 1),
                                                 "Explosion",
