@@ -23,19 +23,20 @@ namespace AtelierXNA
     public class SpriteAnimé : Sprite, IDestructible
     {
         //Constantes
-        protected const int AUCUN_TEMPS_ÉCOULÉ = 0, AUCUN_DÉPLACEMENT = 0, ORIGINE = 0;
+        protected const int AUCUN_TEMPS_ÉCOULÉ = 0, AUCUN_DÉPLACEMENT = 0;
 
         //Propriétés initialement gérées par le constructeur
         Vector2 DescriptionImage { get; set; }
         protected float IntervalleMAJAnnimation { get; set; }
 
         //Propriétés initialement gérées par Initialize
-        protected Rectangle RectangleSource { get; set; }
         public bool ADétruire { get; set; }
         float TempsÉcouléDepuisMAJAnimation { get; set; }
         //int Rangé { get; set; }
         //int VariableÀChangerDeNom { get; set; }
         protected Vector2 Delta { get; set; }
+        int ÉtalementAnimationsAbscisses { get; set; }
+        int ÉtalementAnimationsOrdonnées { get; set; }
 
         /// <summary>
         /// Constructeur de la classe SpriteAnimé
@@ -60,10 +61,11 @@ namespace AtelierXNA
         {
             LoadContent();
             Delta = CalculerDimensionsSpriteOriginal();
-            RectangleSource = new Rectangle(ORIGINE, ORIGINE, (int)Delta.X, (int)Delta.Y);
             ADétruire = false;
             TempsÉcouléDepuisMAJAnimation = AUCUN_TEMPS_ÉCOULÉ;
             base.Initialize();
+            ÉtalementAnimationsAbscisses = (int)DimensionsImage.X - (int)Delta.X;
+            ÉtalementAnimationsOrdonnées = (int)DimensionsImage.Y - (int)Delta.Y;
         }
 
         /// <summary>
@@ -73,6 +75,15 @@ namespace AtelierXNA
         protected override Vector2 CalculerDimensionsSpriteOriginal()
         {
             return base.CalculerDimensionsSpriteOriginal() / DescriptionImage;
+        }
+
+        /// <summary>
+        /// Calcule rectangle couvrant ce qui sera affiché
+        /// </summary>
+        /// <returns>Le rectangle source de type Rectangle</returns>
+        protected override Rectangle CalculerRectangleSource()
+        {
+            return new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>
@@ -96,9 +107,13 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void EffectuerMiseÀJourAnimation()
         {
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width, RectangleSource.X >= Image.Width - (int)Delta.X ? (RectangleSource.Y >= Image.Height - (int)Delta.Y ? ORIGINE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, RectangleSource.X >= ÉtalementAnimationsAbscisses ? (RectangleSource.Y >= ÉtalementAnimationsOrdonnées ? ORDONNÉE_NULLE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
         }
 
+        /// <summary>
+        /// Met à jour le sprite animé
+        /// </summary>
+        /// <param name="gameTime">Contient les informations sur le temps de jeu</param>
         public override void Update(GameTime gameTime)
         {
             TempsÉcouléDepuisMAJAnimation += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -110,18 +125,9 @@ namespace AtelierXNA
         }
 
         /// <summary>
-        /// Méthode qui dessine le SpriteAnimé à l'écran
-        /// </summary>
-        /// <param name="gameTime">Objet contenant l'information de temps de jeu de type GameTime</param>
-        public override void Draw(GameTime gameTime)
-        {
-            GestionSprites.Draw(Image, RectangleDimensionsImageÀLÉchelle, RectangleSource, Color.White);
-        }
-
-        /// <summary>
         /// Prédicat vrai si le Sprite est en collision avec un autre objet
         /// </summary>
-        /// <param name="autreObjet"></param>
+        /// <param name="autreObjet">L'autre objet qui pourrait être en collision</param>
         /// <returns></returns>
         public override bool EstEnCollision(object autreObjet)
         {

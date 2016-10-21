@@ -91,9 +91,7 @@ namespace AtelierXNA
         /// </summary>
         protected override void EffectuerMise¿JourAnimation()
         {
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width,
-                             (int)Delta.Y * AnimationSelonLeDÈplacement,
-                             (int)Delta.X, (int)Delta.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, (int)Delta.Y * AnimationSelonLeDÈplacement, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>

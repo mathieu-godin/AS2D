@@ -31,7 +31,7 @@ namespace AtelierXNA
         protected SpriteBatch GestionSprites { get; set; }
         protected RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         /* probably private */
-        protected Texture2D Image { get; private set; }
+        Texture2D Image { get; set; }
         float …chelle { get; set; }
         protected Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
         protected int MargeDroite { get; set; }
@@ -39,6 +39,8 @@ namespace AtelierXNA
         protected int MargeGauche { get; set; }
         protected int MargeHaut { get; set; }
         Vector2 DimensionsSprite¿Afficher { get; set; }
+        protected Vector2 DimensionsImage { get; private set; }
+        protected Rectangle RectangleSource { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Sprite
@@ -60,11 +62,31 @@ namespace AtelierXNA
         public override void Initialize()
         {
             base.Initialize();
+            DimensionsImage = CalculerDimensionsImage();
             …chelle = Calculer…chelle();
             DimensionsSprite¿Afficher = CalculerDimensionsSprite¿Afficher();
             //Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
             RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
+            RectangleSource = CalculerRectangleSource();
             CalculerMarges();
+        }
+
+        /// <summary>
+        /// Calcule rectangle couvrant ce qui sera affichÈ
+        /// </summary>
+        /// <returns>Le rectangle source de type Rectangle</returns>
+        protected virtual Rectangle CalculerRectangleSource()
+        {
+            return new Rectangle(ABSCISSE_NULLE, ORDONN…E_NULLE, Image.Width, Image.Height);
+        }
+
+        /// <summary>
+        /// Calcule les dimensions de l'aimge
+        /// </summary>
+        /// <returns>Un vecteur de type Vector2 ayant les dimensions de l'image</returns>
+        Vector2 CalculerDimensionsImage()
+        {
+            return new Vector2(Image.Width, Image.Height);
         }
 
         /// <summary>
@@ -139,7 +161,7 @@ namespace AtelierXNA
         {
             //GestionSprites.Draw(Image, Position, ZoneAffichage, Color.White, AUCUNE_ROTATION, Origine, …chelle, SpriteEffects.None, AUCUNE_COUCHE_DE_PROFONDEUR);
 
-            GestionSprites.Draw(Image, RectangleDimensionsImage¿L…chelle, Color.White);
+            GestionSprites.Draw(Image, RectangleDimensionsImage¿L…chelle, RectangleSource, Color.White);
         }
 
         /// <summary>
