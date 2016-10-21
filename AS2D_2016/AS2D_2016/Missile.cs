@@ -85,17 +85,21 @@ namespace AtelierXNA
         /// <param name="gameTime">Contient les informations de temps</param>
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-            TempsÉcouléDepuisMAJDéplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (TempsÉcouléDepuisMAJDéplacement >= IntervalleMAJDéplacement)
+            if (!ExplosionActivée)
             {
-                EffectuerMiseÀJourDéplacement();
-                TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
+                base.Update(gameTime);
+                TempsÉcouléDepuisMAJDéplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (TempsÉcouléDepuisMAJDéplacement >= IntervalleMAJDéplacement)
+                {
+                    EffectuerMiseÀJourDéplacement();
+                    TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
+                }
             }
-            if (ExplosionActivée)
+            else
             {
                 GérerExplosion(gameTime);
-            }
+            } 
+
             if (Collision)
             {
                 Collision = false;
@@ -150,7 +154,6 @@ namespace AtelierXNA
                 {
                     ExplosionActivée = false;
                     Explosion.ADétruire = true;
-                    Game.Components.Remove(Explosion);
                     ADétruire = true;
                 }
             }
