@@ -101,7 +101,7 @@ namespace AtelierXNA
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            //Ajout pr missile
+            
             if (GestionInput.EstNouvelleTouche(Keys.Space))
                 LancerMissile();
 
@@ -190,28 +190,34 @@ namespace AtelierXNA
         /// </summary>
         /// <param name="déplacement">Déplacement horizontal</param>
         /// <param name="posActuelle">Postion actuelle en </param>
-        /// <param name="BorneMin"></param>
-        /// <param name="BorneMax"></param>
-        /// <returns></returns>
+        /// <param name="BorneMin">Borne minimale de la position</param>
+        /// <param name="BorneMax">Borne maximale de la position</param>
+        /// <returns>La position horizontale</returns>
         float CalculerPosition(int déplacement, float posActuelle, int BorneMin, int BorneMax)
         {
             float position = posActuelle + déplacement;
             return MathHelper.Min(MathHelper.Max(BorneMin, position), BorneMax);
         }
 
+        /// <summary>
+        /// Vérifie si le vaisseau se déplace
+        /// </summary>
+        /// <returns>Vrai ou faux</returns>
         bool SeDéplace()
         {
             return DéplacementRésultant != Vector2.Zero;
         }
 
+        /// <summary>
+        /// S'occuppe de lancer les missiles selon un maximum défini
+        /// </summary>
         void LancerMissile()
         {
             int nbreDeMissiles = (Game.Components.Where(composant => composant is Missile && !((Missile)composant).ADétruire && ((Missile)composant).Visible).Count());
 
             if (nbreDeMissiles < NB_DE_MISSILES_MAX)
             {
-                Missile missile = new Missile(Game,
-                                                "Missile",
+                Missile missile = new Missile(Game, "Missile",
                                                 new Vector2(RectangleDimensionsImageÀLÉchelle.X + RectangleDimensionsImageÀLÉchelle.Width / 2 - 4, RectangleDimensionsImageÀLÉchelle.Y - RectangleDimensionsImageÀLÉchelle.Height / 4),
                                                 new Rectangle(0, 0, 30, 40),
                                                 new Vector2(25, 1),
