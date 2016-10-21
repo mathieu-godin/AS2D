@@ -6,16 +6,9 @@
 
 // Modification : Modifications pour la descente du vaisceau au début
 //                Mathieu Godin
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace AtelierXNA
 {
@@ -36,16 +29,14 @@ namespace AtelierXNA
         float TempsÉcouléDepuisMAJ { get; set; }
         int AnimationSelonLeDéplacement { get; set; }
         Vector2 AnciennePosition { get; set; }
-
-        //Propriété initialement gérée par LoadContent
-        InputManager GestionInput { get; set; }
-
-        //à voir
-        Vector2 DéplacementRésultant { get; set; }
         // Ajouté par Mathieu Godin pour la descente du vaisseau
         int OrdonnéeFinaleVaisseau { get; set; }
         bool EnDescente { get; set; }
         Vector2 VecteurDéplacementDescente { get; set; } // D'autres similaires pourraient être utilisés dans le reste de la classe pour optimiser
+        Vector2 DéplacementRésultant { get; set; }
+
+        //Propriété initialement gérée par LoadContent
+        InputManager GestionInput { get; set; }
 
 
         /// <summary>
@@ -68,24 +59,29 @@ namespace AtelierXNA
             IntervalleMAJDéplacement = intervalleMAJDéplacement;
         }
 
+        /// <summary>
+        /// Initialise les propriétés du vaisseau spatial
+        /// </summary>
         public override void Initialize()
         {
             base.Initialize();
-
-            //À effacer avec la descente du vaisseau maintenant : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
-            Position = new Vector2(Position.X - RectangleDimensionsImageÀLÉchelle.Width / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - RectangleDimensionsImageÀLÉchelle.Height / DIVISEUR_OBTENTION_DEMI_GRANDEUR); // Nouvelle ligne
             TempsÉcouléDepuisMAJ = 0;
             AnimationSelonLeDéplacement = 0;
+            //À effacer avec la descente du vaisseau maintenant : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
+            Position = new Vector2(Position.X - RectangleDimensionsImageÀLÉchelle.Width / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - RectangleDimensionsImageÀLÉchelle.Height / DIVISEUR_OBTENTION_DEMI_GRANDEUR); // Nouvelle ligne
             AnciennePosition = new Vector2(Position.X, Position.Y);
-            OrdonnéeFinaleVaisseau = Game.Window.ClientBounds.Height - RectangleDimensionsImageÀLÉchelle.Height; // Nouvelle ligne
-            EnDescente = true; // Nouvelle ligne
+            OrdonnéeFinaleVaisseau = Game.Window.ClientBounds.Height - RectangleDimensionsImageÀLÉchelle.Height; 
+            EnDescente = true;
             VecteurDéplacementDescente = new Vector2(AUCUN_DÉPLACEMENT, NB_PIXELS_DE_DÉPLACEMENT);
+            DéplacementRésultant = Position - AnciennePosition;
         }
 
+        /// <summary>
+        /// Charge le(s) composent(s) nécessaire(s)
+        /// </summary>
         protected override void LoadContent()
         {
             base.LoadContent();
-
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
         }
 
@@ -184,14 +180,6 @@ namespace AtelierXNA
         {
             return DéplacementRésultant != Vector2.Zero;
         }
-
-        //public override void Draw(GameTime gameTime)
-        //{
-        //    //GestionSprites.Draw(Image, Position, RectangleSource, Color.White);
-
-        //    GestionSprites.Draw(Image, new Rectangle((int)Position.X, (int)Position.Y, (int)(Delta.X*Échelle), (int)(Delta.Y*Échelle)),
-        //                        RectangleSource, Color.White);
-        //}
 
         void LancerMissile()
         {
