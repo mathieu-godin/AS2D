@@ -21,6 +21,7 @@ namespace AtelierXNA
         const int NE_SE_DÉPLACE_PAS = 0;
         const int SE_DÉPLACE = 1;
         const int NB_PIXELS_DE_DÉPLACEMENT = 4; // Je l'ai changé de 5 à 4 car ça ressemblait plus à l'exemple d'exécution
+        const int NB_DE_MISSILES_MAX = 3;
 
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
@@ -77,7 +78,7 @@ namespace AtelierXNA
         }
 
         /// <summary>
-        /// Charge le(s) composent(s) nécessaire(s)
+        /// Charge le(s) composent(s) nécessaire(s) au vaiseau spatial
         /// </summary>
         protected override void LoadContent()
         {
@@ -85,6 +86,9 @@ namespace AtelierXNA
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
         }
 
+        /// <summary>
+        /// Effectuer la mise à jour de l'animation du vaiseau (en lien avec le déplacement)
+        /// </summary>
         protected override void EffectuerMiseÀJourAnimation()
         {
             RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % Image.Width,
@@ -92,6 +96,10 @@ namespace AtelierXNA
                              (int)Delta.X, (int)Delta.Y);
         }
 
+        /// <summary>
+        /// Méthode update du composant vaisseau
+        /// </summary>
+        /// <param name="gameTime">Objet de classe GameTime</param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -103,7 +111,7 @@ namespace AtelierXNA
             TempsÉcouléDepuisMAJ += TempsÉcoulé;
             if (TempsÉcouléDepuisMAJ >= IntervalleMAJDéplacement)
             {
-                DéterminerSiVaisseauEnDescente(); // Nouvelle méthode
+                DéterminerSiVaisseauEnDescente();
                 EffectuerMiseÀJourDéplacement();
                 TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
             }
@@ -123,7 +131,6 @@ namespace AtelierXNA
         /// <summary>
         /// Gère la descente du vaisseau au début de la partie
         /// </summary>
-        /// <param name="gameTime">Contient les informations de temps de jeu</param>
         void GérerDescenteDuVaisseau()
         {
             Position += VecteurDéplacementDescente;
@@ -135,8 +142,9 @@ namespace AtelierXNA
             }
         }
 
-
-
+        /// <summary>
+        /// Effectue la mise à jour du déplacement selon les touches appuyées sur le clavier
+        /// </summary>
         void EffectuerMiseÀJourDéplacement()
         {
             AnciennePosition = new Vector2(Position.X, Position.Y);
@@ -146,6 +154,9 @@ namespace AtelierXNA
             AnimationSelonLeDéplacement = (SeDéplace() ? SE_DÉPLACE : NE_SE_DÉPLACE_PAS);
         }
 
+        /// <summary>
+        /// Gère le déplacement horizontal du vaisseau selon les touches A et D
+        /// </summary>
         void GérerClavier()
         {
             if (GestionInput.EstClavierActivé)
@@ -155,11 +166,20 @@ namespace AtelierXNA
             }
         }
 
+        /// <summary>
+        /// Renvoit le nombre de pixels de déplacement si la touche est enfoncée, sinon renvoit un zéro
+        /// </summary>
+        /// <param name="touche">Touche enfoncée</param>
+        /// <returns>Nombre de pixels de déplacement ou zéro</returns>
         int GérerTouche(Keys touche)
         {
             return GestionInput.EstEnfoncée(touche) ? NB_PIXELS_DE_DÉPLACEMENT : 0;
         }
 
+        /// <summary>
+        /// Ajuste la propriété position selon le déplacement horizontal
+        /// </summary>
+        /// <param name="déplacementHorizontal">Déplacement horizontal</param>
         void AjusterPosition(int déplacementHorizontal)
         {
             float posX = CalculerPosition(déplacementHorizontal, Position.X, MargeGauche, MargeDroite);
@@ -167,6 +187,14 @@ namespace AtelierXNA
             Position = new Vector2(posX, Position.Y);
         }
 
+        /// <summary>
+        /// Calcul la position horizontale selon le changement
+        /// </summary>
+        /// <param name="déplacement">Déplacement horizontal</param>
+        /// <param name="posActuelle">Postion actuelle en </param>
+        /// <param name="BorneMin"></param>
+        /// <param name="BorneMax"></param>
+        /// <returns></returns>
         float CalculerPosition(int déplacement, float posActuelle, int BorneMin, int BorneMax)
         {
             float position = posActuelle + déplacement;
@@ -182,7 +210,7 @@ namespace AtelierXNA
         {
             int nbreDeMissiles = (Game.Components.Where(composant => composant is Missile && !((Missile)composant).ADétruire && ((Missile)composant).Visible).Count());
 
-            if (nbreDeMissiles < 3)
+            if (nbreDeMissiles < NB_DE_MISSILES_MAX)
             {
                 Missile missile = new Missile(Game,
                                                 "Missile",
