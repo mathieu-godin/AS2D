@@ -85,20 +85,20 @@ namespace AtelierXNA
         /// <param name="gameTime">Contient les informations de temps</param>
         public override void Update(GameTime gameTime)
         {
-            if (!ExplosionActivée)
+
+            base.Update(gameTime);
+            TempsÉcouléDepuisMAJDéplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TempsÉcouléDepuisMAJDéplacement >= (ExplosionActivée? INTERVALLE_ANIMATION_LENT:IntervalleMAJDéplacement))
             {
-                base.Update(gameTime);
-                TempsÉcouléDepuisMAJDéplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (TempsÉcouléDepuisMAJDéplacement >= IntervalleMAJDéplacement)
+                if (!ExplosionActivée)
                 {
                     EffectuerMiseÀJourDéplacement();
                     TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
                 }
+                else
+                    GérerExplosion();
             }
-            else
-            {
-                GérerExplosion(gameTime);
-            } 
+
 
             if (Collision)
             {
@@ -118,8 +118,6 @@ namespace AtelierXNA
             if (Position.Y <= MargeHaut && !ExplosionActivée)
             {
                 ActiverExplosion();
-                //GérerExplosion(gameTime);
-                //ADétruire = true;
             }
         }
 
@@ -130,7 +128,6 @@ namespace AtelierXNA
         /// </summary>
         public void ActiverExplosion()
         {
-            //ADétruire = true;//LIGNE ESSENTIELLE!!!
             Visible = false;
             Explosion = new SpriteAnimé(Game, "Explosion", Position, ZoneExplosion, DescriptionImageExplosion, INTERVALLE_ANIMATION_LENT);
             ExplosionActivée = true;
@@ -143,19 +140,15 @@ namespace AtelierXNA
         /// Gère l'explosion du missile
         /// </summary>
         /// <param name="gameTime">Contient les informations de temps de jeu</param>
-        void GérerExplosion(GameTime gameTime)
+        void GérerExplosion()
         {
-            TempsÉcouléDepuisMAJExplosion += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (TempsÉcouléDepuisMAJExplosion >= INTERVALLE_ANIMATION_LENT)
+            ++PhaseExplosion;
+            TempsÉcouléDepuisMAJExplosion = AUCUN_TEMPS_ÉCOULÉ;
+            if (PhaseExplosion >= DescriptionImageExplosion.X * DescriptionImageExplosion.Y)
             {
-                ++PhaseExplosion;
-                TempsÉcouléDepuisMAJExplosion = AUCUN_TEMPS_ÉCOULÉ;
-                if (PhaseExplosion >= DescriptionImageExplosion.X * DescriptionImageExplosion.Y)
-                {
-                    ExplosionActivée = false;
-                    Explosion.ADétruire = true;
-                    ADétruire = true;
-                }
+                ExplosionActivée = false;
+                Explosion.ADétruire = true;
+                ADétruire = true;
             }
         }
     }
