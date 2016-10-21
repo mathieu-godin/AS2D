@@ -18,10 +18,13 @@ namespace AtelierXNA
     public class VaisseauSpatial : SpriteAnimé
     {
         //Constante
-        const int NE_SE_DÉPLACE_PAS = 0;
-        const int SE_DÉPLACE = 1;
-        const int NB_PIXELS_DE_DÉPLACEMENT = 4; // Je l'ai changé de 5 à 4 car ça ressemblait plus à l'exemple d'exécution
-        const int NB_DE_MISSILES_MAX = 3;
+        const int NE_SE_DÉPLACE_PAS = 0,
+                  SE_DÉPLACE = 1,
+                  NB_PIXELS_DE_DÉPLACEMENT = 4, // Je l'ai changé de 5 à 4 car ça ressemblait plus à l'exemple d'exécution
+                  NB_DE_MISSILES_MAX = 3,
+                  HAUTEUR_MISSILE_MAX = 40,
+                  NB_DE_MISSILE_DANSLIMAGE = 25;
+
 
         //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
@@ -219,8 +222,8 @@ namespace AtelierXNA
             {
                 Missile missile = new Missile(Game, "Missile",
                                                 new Vector2(Position.X + DimensionsSpriteÀAfficher.X / DIVISEUR_OBTENTION_DEMI_GRANDEUR - 4, Position.Y - DimensionsSpriteÀAfficher.Y / 4),
-                                                new Rectangle(0, 0, 30, 40),
-                                                new Vector2(25, 1),
+                                                new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, HAUTEUR_MISSILE_MAX, HAUTEUR_MISSILE_MAX),
+                                                new Vector2(NB_DE_MISSILE_DANSLIMAGE, 1),
                                                 "Explosion",
                                                 new Vector2(5, 4),
                                                 1.5f * Atelier.INTERVALLE_STANDARDS,
