@@ -101,8 +101,6 @@ namespace AtelierXNA
 
         public override void Update(GameTime gameTime)
         {
-            RectangleDimensionsImageÀLÉchelle = CalculerRectangleDimensionsImageÀLÉchelle();
-
             TempsÉcouléDepuisMAJAnimation += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJAnimation >= IntervalleMAJAnnimation)
             {

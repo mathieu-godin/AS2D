@@ -118,6 +118,7 @@ namespace AtelierXNA
         {
             Position -= VecteurDÈplacementMAJ;
             IntervalleMAJDÈplacement -= CHANGEMENT_INTERVALLE_POUR_ACC…L…RATION;
+            RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
             if (Position.Y <= MargeHaut && !ExplosionActivÈe)
             {
                 ActiverExplosion();
