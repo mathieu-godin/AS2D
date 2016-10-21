@@ -33,12 +33,12 @@ namespace AtelierXNA
         /* probably private */
         Texture2D Image { get; set; }
         float …chelle { get; set; }
-        protected Rectangle RectangleImage¿Afficher { get; set; }
+        Rectangle RectangleImage¿Afficher { get; set; }
         protected int MargeDroite { get; set; }
         protected int MargeBas { get; set; }
         protected int MargeGauche { get; set; }
         protected int MargeHaut { get; set; }
-        Vector2 DimensionsSprite¿Afficher { get; set; }
+        protected Vector2 DimensionsSprite¿Afficher { get; private set; }
         protected Vector2 DimensionsImage { get; private set; }
         protected Rectangle RectangleSource { get; set; }
 
@@ -66,7 +66,7 @@ namespace AtelierXNA
             …chelle = Calculer…chelle();
             DimensionsSprite¿Afficher = CalculerDimensionsSprite¿Afficher();
             //Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
-            RectangleImage¿Afficher = CalculerRectangleImage¿Afficher();
+            CalculerRectangleImage¿Afficher();
             RectangleSource = CalculerRectangleSource();
             CalculerMarges();
         }
@@ -93,9 +93,9 @@ namespace AtelierXNA
         /// Calcule le rectangle reprÈsentant ce qui va Ítre affichÈ
         /// </summary>
         /// <returns>Le rectangle de type Rectangle reprÈsentant le pourtour de ce qui sera affichÈ</returns>
-        protected Rectangle CalculerRectangleImage¿Afficher()
+        protected void CalculerRectangleImage¿Afficher()
         {
-            return new Rectangle((int)Position.X, (int)Position.Y, (int)(DimensionsSprite¿Afficher.X), (int)(DimensionsSprite¿Afficher.Y));
+            RectangleImage¿Afficher = new Rectangle((int)Position.X, (int)Position.Y, (int)(DimensionsSprite¿Afficher.X), (int)(DimensionsSprite¿Afficher.Y));
         }
 
         /// <summary>
@@ -167,23 +167,13 @@ namespace AtelierXNA
         /// <summary>
         /// PrÈdicat vrai si le Sprite est en collision avec un autre objet
         /// </summary>
-        /// <param name="autreObjet"></param>
+        /// <param name="autreObjet">L'autre objet qui pourrait Ítre en collision</param>
         /// <returns></returns>
-        public virtual bool EstEnCollision(object autreObjet)
+        public bool EstEnCollision(object autreObjet)
         {
-            //SpriteAnimÈ autreSprite = (SpriteAnimÈ)autreObjet;
-            //Rectangle rectangleCollision = Rectangle.Intersect(RectangleDimensionsImage¿L…chelle, autreSprite.RectangleDimensionsImage¿L…chelle);
-            //bool collision = rectangleCollision.Width == LARGEUR_NULLE && rectangleCollision.Height == HAUTEUR_NULLE;
+            Rectangle autreRectangle = ((SpriteAnimÈ)autreObjet).RectangleImage¿Afficher;
 
-            //autreSprite.ADÈtruire = collision;
-            //return collision;
-
-            //Rectangle autreRectangle = ((SpriteAnimÈ)autreObjet).DestinationRectangle;
-
-            //return ZoneAffichage.Intersects(autreRectangle);
-
-            return true;
-
+            return RectangleImage¿Afficher.Intersects(autreRectangle);
         }
 
         /// <summary>

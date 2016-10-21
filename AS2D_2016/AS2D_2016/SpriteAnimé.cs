@@ -123,17 +123,5 @@ namespace AtelierXNA
                 TempsÉcouléDepuisMAJAnimation = AUCUN_TEMPS_ÉCOULÉ;
             }
         }
-
-        /// <summary>
-        /// Prédicat vrai si le Sprite est en collision avec un autre objet
-        /// </summary>
-        /// <param name="autreObjet">L'autre objet qui pourrait être en collision</param>
-        /// <returns></returns>
-        public override bool EstEnCollision(object autreObjet)
-        {
-            Rectangle autreRectangle = ((SpriteAnimé)autreObjet).RectangleImageÀAfficher;
-
-            return RectangleImageÀAfficher.Intersects(autreRectangle);
-        }
     }
 }

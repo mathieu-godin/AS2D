@@ -87,7 +87,7 @@ namespace AtelierXNA
         protected virtual void EffectuerMiseÀJourDéplacement()
         {
             Position += VecteurDéplacementMAJ;
-            RectangleImageÀAfficher = CalculerRectangleImageÀAfficher();
+            CalculerRectangleImageÀAfficher();
             if (Position.X <= MargeGauche || Position.X >= MargeDroite)
             {
                 AngleDéplacement = ANGLE_PLAT - AngleDéplacement;

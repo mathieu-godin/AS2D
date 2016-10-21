@@ -117,7 +117,7 @@ namespace AtelierXNA
         {
             Position -= VecteurDÈplacementMAJ;
             IntervalleMAJDÈplacement -= CHANGEMENT_INTERVALLE_POUR_ACC…L…RATION;
-            RectangleImage¿Afficher = CalculerRectangleImage¿Afficher();
+            CalculerRectangleImage¿Afficher();
             if (Position.Y <= MargeHaut && !ExplosionActivÈe)
             {
                 ActiverExplosion();
@@ -133,7 +133,6 @@ namespace AtelierXNA
             Visible = false;
             Explosion = new SpriteAnimÈ(Game, "Explosion", Position, ZoneExplosion, DescriptionImageExplosion, INTERVALLE_ANIMATION_LENT);
             ExplosionActivÈe = true;
-            Temps…coulÈDepuisMAJExplosion = AUCUN_TEMPS_…COUL…;
             PhaseExplosion = AVANT_PREMI»RE_PHASE_EXPLOSION;
             Collision = true;
         }
