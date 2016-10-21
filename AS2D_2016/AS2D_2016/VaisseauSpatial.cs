@@ -127,6 +127,7 @@ namespace AtelierXNA
         void GÈrerDescenteDuVaisseau()
         {
             Position += VecteurDÈplacementDescente;
+            RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
             if (Position.Y >= OrdonnÈeFinaleVaisseau)
             {
                 Position = new Vector2(Position.X, OrdonnÈeFinaleVaisseau);
@@ -139,14 +140,10 @@ namespace AtelierXNA
         void EffectuerMise¿JourDÈplacement()
         {
             AnciennePosition = new Vector2(Position.X, Position.Y);
-
             GÈrerClavier();
-
+            RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
             DÈplacementRÈsultant = Position - AnciennePosition;
-
             AnimationSelonLeDÈplacement = (SeDÈplace() ? SE_D…PLACE : NE_SE_D…PLACE_PAS);
-
-
         }
 
         void GÈrerClavier()
