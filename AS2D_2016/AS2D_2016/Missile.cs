@@ -31,7 +31,6 @@ namespace AtelierXNA
         Texture2D ImageExplosion { get; set; }
         float Temps…coulÈDepuisMAJDÈplacement { get; set; }
         public bool ExplosionActivÈe { get; private set; }
-        float Temps…coulÈDepuisMAJExplosion { get; set; }
         int PhaseExplosion { get; set; }
         public SpriteAnimÈ Explosion { get; private set; }
         Vector2 VecteurDÈplacementMAJ { get; set; }
@@ -86,19 +85,23 @@ namespace AtelierXNA
         public override void Update(GameTime gameTime)
         {
 
-            base.Update(gameTime);
+            
             Temps…coulÈDepuisMAJDÈplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (Temps…coulÈDepuisMAJDÈplacement >= (ExplosionActivÈe? INTERVALLE_ANIMATION_LENT:IntervalleMAJDÈplacement))
             {
                 if (!ExplosionActivÈe)
                 {
+                    base.Update(gameTime);
                     EffectuerMise¿JourDÈplacement();
                     Temps…coulÈDepuisMAJDÈplacement = AUCUN_TEMPS_…COUL…;
                 }
                 else
+                {
                     GÈrerExplosion();
-            }
+                    Temps…coulÈDepuisMAJDÈplacement = AUCUN_TEMPS_…COUL…;
+                }
 
+            }
 
             if (Collision)
             {
@@ -114,13 +117,12 @@ namespace AtelierXNA
         {
             Position -= VecteurDÈplacementMAJ;
             IntervalleMAJDÈplacement -= CHANGEMENT_INTERVALLE_POUR_ACC…L…RATION;
-            RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
+            RectangleImage¿Afficher = CalculerRectangleImage¿Afficher();
             if (Position.Y <= MargeHaut && !ExplosionActivÈe)
             {
                 ActiverExplosion();
             }
         }
-
         
 
         /// <summary>
@@ -143,7 +145,6 @@ namespace AtelierXNA
         void GÈrerExplosion()
         {
             ++PhaseExplosion;
-            Temps…coulÈDepuisMAJExplosion = AUCUN_TEMPS_…COUL…;
             if (PhaseExplosion >= DescriptionImageExplosion.X * DescriptionImageExplosion.Y)
             {
                 ExplosionActivÈe = false;
