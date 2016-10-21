@@ -69,9 +69,9 @@ namespace AtelierXNA
             Temps…coulÈDepuisMAJ = 0;
             AnimationSelonLeDÈplacement = 0;
             //¿ effacer avec la descente du vaisseau maintenant : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
-            Position = new Vector2(Position.X - RectangleDimensionsImage¿L…chelle.Width / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - RectangleDimensionsImage¿L…chelle.Height / DIVISEUR_OBTENTION_DEMI_GRANDEUR); // Nouvelle ligne
+            Position = new Vector2(Position.X - RectangleImage¿Afficher.Width / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - RectangleImage¿Afficher.Height / DIVISEUR_OBTENTION_DEMI_GRANDEUR); // Nouvelle ligne
             AnciennePosition = new Vector2(Position.X, Position.Y);
-            OrdonnÈeFinaleVaisseau = Game.Window.ClientBounds.Height - RectangleDimensionsImage¿L…chelle.Height; 
+            OrdonnÈeFinaleVaisseau = Game.Window.ClientBounds.Height - RectangleImage¿Afficher.Height; 
             EnDescente = true;
             VecteurDÈplacementDescente = new Vector2(AUCUN_D…PLACEMENT, NB_PIXELS_DE_D…PLACEMENT);
             DÈplacementRÈsultant = Position - AnciennePosition;
@@ -132,7 +132,7 @@ namespace AtelierXNA
         void GÈrerDescenteDuVaisseau()
         {
             Position += VecteurDÈplacementDescente;
-            RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
+            RectangleImage¿Afficher = CalculerRectangleImage¿Afficher();
             if (Position.Y >= OrdonnÈeFinaleVaisseau)
             {
                 Position = new Vector2(Position.X, OrdonnÈeFinaleVaisseau);
@@ -147,7 +147,7 @@ namespace AtelierXNA
         {
             AnciennePosition = new Vector2(Position.X, Position.Y);
             GÈrerClavier();
-            RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
+            RectangleImage¿Afficher = CalculerRectangleImage¿Afficher();
             DÈplacementRÈsultant = Position - AnciennePosition;
             AnimationSelonLeDÈplacement = (SeDÈplace() ? SE_D…PLACE : NE_SE_D…PLACE_PAS);
         }
@@ -218,7 +218,7 @@ namespace AtelierXNA
             if (nbreDeMissiles < NB_DE_MISSILES_MAX)
             {
                 Missile missile = new Missile(Game, "Missile",
-                                                new Vector2(RectangleDimensionsImage¿L…chelle.X + RectangleDimensionsImage¿L…chelle.Width / 2 - 4, RectangleDimensionsImage¿L…chelle.Y - RectangleDimensionsImage¿L…chelle.Height / 4),
+                                                new Vector2(RectangleImage¿Afficher.X + RectangleImage¿Afficher.Width / 2 - 4, RectangleImage¿Afficher.Y - RectangleImage¿Afficher.Height / 4),
                                                 new Rectangle(0, 0, 30, 40),
                                                 new Vector2(25, 1),
                                                 "Explosion",

@@ -131,9 +131,9 @@ namespace AtelierXNA
         /// <returns></returns>
         public override bool EstEnCollision(object autreObjet)
         {
-            Rectangle autreRectangle = ((SpriteAnimé)autreObjet).RectangleDimensionsImageÀLÉchelle;
+            Rectangle autreRectangle = ((SpriteAnimé)autreObjet).RectangleImageÀAfficher;
 
-            return RectangleDimensionsImageÀLÉchelle.Intersects(autreRectangle);
+            return RectangleImageÀAfficher.Intersects(autreRectangle);
         }
     }
 }

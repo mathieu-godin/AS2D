@@ -33,7 +33,7 @@ namespace AtelierXNA
         /* probably private */
         Texture2D Image { get; set; }
         float …chelle { get; set; }
-        protected Rectangle RectangleDimensionsImage¿L…chelle { get; set; }
+        protected Rectangle RectangleImage¿Afficher { get; set; }
         protected int MargeDroite { get; set; }
         protected int MargeBas { get; set; }
         protected int MargeGauche { get; set; }
@@ -66,7 +66,7 @@ namespace AtelierXNA
             …chelle = Calculer…chelle();
             DimensionsSprite¿Afficher = CalculerDimensionsSprite¿Afficher();
             //Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
-            RectangleDimensionsImage¿L…chelle = CalculerRectangleDimensionsImage¿L…chelle();
+            RectangleImage¿Afficher = CalculerRectangleImage¿Afficher();
             RectangleSource = CalculerRectangleSource();
             CalculerMarges();
         }
@@ -93,7 +93,7 @@ namespace AtelierXNA
         /// Calcule le rectangle reprÈsentant ce qui va Ítre affichÈ
         /// </summary>
         /// <returns>Le rectangle de type Rectangle reprÈsentant le pourtour de ce qui sera affichÈ</returns>
-        protected Rectangle CalculerRectangleDimensionsImage¿L…chelle()
+        protected Rectangle CalculerRectangleImage¿Afficher()
         {
             return new Rectangle((int)Position.X, (int)Position.Y, (int)(DimensionsSprite¿Afficher.X), (int)(DimensionsSprite¿Afficher.Y));
         }
@@ -161,7 +161,7 @@ namespace AtelierXNA
         {
             //GestionSprites.Draw(Image, Position, ZoneAffichage, Color.White, AUCUNE_ROTATION, Origine, …chelle, SpriteEffects.None, AUCUNE_COUCHE_DE_PROFONDEUR);
 
-            GestionSprites.Draw(Image, RectangleDimensionsImage¿L…chelle, RectangleSource, Color.White);
+            GestionSprites.Draw(Image, RectangleImage¿Afficher, RectangleSource, Color.White);
         }
 
         /// <summary>
@@ -191,8 +191,8 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void CalculerMarges()
         {
-            MargeDroite = Game.Window.ClientBounds.Width - RectangleDimensionsImage¿L…chelle.Width;
-            MargeBas = Game.Window.ClientBounds.Height - RectangleDimensionsImage¿L…chelle.Height;
+            MargeDroite = Game.Window.ClientBounds.Width - RectangleImage¿Afficher.Width;
+            MargeBas = Game.Window.ClientBounds.Height - RectangleImage¿Afficher.Height;
             MargeHaut = HAUTEUR_NULLE;
             MargeGauche = LARGEUR_NULLE;
         }
