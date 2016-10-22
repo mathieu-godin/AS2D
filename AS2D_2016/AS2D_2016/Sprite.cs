@@ -180,6 +180,5 @@ namespace AtelierXNA
             MargeHaut = HAUTEUR_NULLE;
             MargeGauche = LARGEUR_NULLE;
         }
-        int allo;
     }
 }
