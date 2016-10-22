@@ -78,15 +78,6 @@ namespace AtelierXNA
         }
 
         /// <summary>
-        /// Calcule rectangle couvrant ce qui sera affiché
-        /// </summary>
-        /// <returns>Le rectangle source de type Rectangle</returns>
-        protected override Rectangle CalculerRectangleSource()
-        {
-            return new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, (int)Delta.X, (int)Delta.Y);
-        }
-
-        /// <summary>
         /// Calcule l'échelle horizontale du sprite pour la méthode Draw()
         /// </summary>
         protected override float CalculerÉchelleHorizontale()
@@ -107,7 +98,16 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void EffectuerMiseÀJourAnimation()
         {
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, RectangleSource.X >= ÉtalementAnimationsAbscisses ? (RectangleSource.Y >= ÉtalementAnimationsOrdonnées ? ORDONNÉE_NULLE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+            CalculerRectangleSource();
+        }
+
+        /// <summary>
+        /// Crée le rectangle représentant le pourtour de ce qui est sélectionné dans l'image originale
+        /// </summary>
+        /// <returns>Un rectangle de type Rectangle</returns>
+        protected new Rectangle CréerRectangleSource()
+        {
+            return new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, RectangleSource.X >= ÉtalementAnimationsAbscisses ? (RectangleSource.Y >= ÉtalementAnimationsOrdonnées ? ORDONNÉE_NULLE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>

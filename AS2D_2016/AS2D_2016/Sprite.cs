@@ -26,21 +26,20 @@ namespace AtelierXNA
         protected const int ORDONNÉE_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
 
         string NomImage { get; set; }
-        public Vector2 Position { get; protected set; }
-        protected Rectangle ZoneAffichage { get; set; }
-        protected SpriteBatch GestionSprites { get; set; }
-        protected RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
-        /* probably private */
         Texture2D Image { get; set; }
         float Échelle { get; set; }
         Rectangle RectangleImageÀAfficher { get; set; }
-        protected int MargeDroite { get; set; }
-        protected int MargeBas { get; set; }
-        protected int MargeGauche { get; set; }
-        protected int MargeHaut { get; set; }
+        SpriteBatch GestionSprites { get; set; }
+        RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
+        protected Rectangle ZoneAffichage { get; private set; }
+        protected int MargeDroite { get; private set; }
+        protected int MargeBas { get; private set; }
+        protected int MargeGauche { get; private set; }
+        protected int MargeHaut { get; private set; }
         protected Vector2 DimensionsSpriteÀAfficher { get; private set; }
         protected Vector2 DimensionsImage { get; private set; }
-        protected Rectangle RectangleSource { get; set; }
+        protected Rectangle RectangleSource { get; private set; }
+        public Vector2 Position { get; protected set; }
 
         /// <summary>
         /// Constructeur de la classe Sprite
@@ -67,7 +66,7 @@ namespace AtelierXNA
             DimensionsSpriteÀAfficher = CalculerDimensionsSpriteÀAfficher();
             //Origine = new Vector2(ABSCISSE_NULLE, ORDONNÉE_NULLE);
             CalculerRectangleImageÀAfficher();
-            RectangleSource = CalculerRectangleSource();
+            CalculerRectangleSource();
             CalculerMarges();
         }
 
@@ -75,10 +74,19 @@ namespace AtelierXNA
         /// Calcule rectangle couvrant ce qui sera affiché
         /// </summary>
         /// <returns>Le rectangle source de type Rectangle</returns>
-        protected virtual Rectangle CalculerRectangleSource()
+        protected void CalculerRectangleSource()
+        {
+            RectangleSource = CréerRectangleSource();
+        }
+
+        /// <summary>
+        /// Crée le rectangle représentant le pourtour de ce qui est sélectionné dans l'image originale
+        /// </summary>
+        /// <returns>Un rectangle de type Rectangle</returns>
+        Rectangle CréerRectangleSource()
         {
             return new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, Image.Width, Image.Height);
-        }
+        } 
 
         /// <summary>
         /// Calcule les dimensions de l'aimge

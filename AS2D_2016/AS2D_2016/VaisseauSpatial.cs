@@ -90,11 +90,12 @@ namespace AtelierXNA
         }
 
         /// <summary>
-        /// Effectuer la mise à jour de l'animation du vaiseau (en lien avec le déplacement)
+        /// Crée le rectangle représentant le pourtour de ce qui est sélectionné dans l'image originale
         /// </summary>
-        protected override void EffectuerMiseÀJourAnimation()
+        /// <returns>Un rectangle de type Rectangle</returns>
+        protected new Rectangle CréerRectangleSource()
         {
-            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, (int)Delta.Y * AnimationSelonLeDéplacement, (int)Delta.X, (int)Delta.Y);
+            return new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, (int)Delta.Y * AnimationSelonLeDéplacement, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>
