@@ -71,6 +71,15 @@ namespace AtelierXNA
         }
 
         /// <summary>
+        /// Charge le contenu nécessaire au fonctionnement du Missile
+        /// </summary>
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+            ImageExplosion = GestionnaireDeTextures.Find(NomImageExplosion);
+        }
+
+        /// <summary>
         /// Met à jour le Missile
         /// </summary>
         /// <param name="gameTime">Contient les informations de temps de jeu</param>
