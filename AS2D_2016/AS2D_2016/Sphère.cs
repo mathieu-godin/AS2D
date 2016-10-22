@@ -114,6 +114,5 @@ namespace AtelierXNA
                 VecteurDéplacementMAJ = new Vector2(NORME_VECTEUR_DÉPLACEMENT * (float)Math.Cos(MathHelper.ToRadians(AngleDéplacement)), NORME_VECTEUR_DÉPLACEMENT * (float)Math.Sin(MathHelper.ToRadians(AngleDéplacement)));
             }
         }
-        int bonjour;
     }
 }
