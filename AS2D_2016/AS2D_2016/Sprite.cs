@@ -9,8 +9,6 @@ RÙle : Composant qui est un DrawableGameComponent et
        un sprite ‡ l'Ècran par le biais d'un Texture2D
 
 CrÈÈ : 5 octobre 2016
-ModifiÈ : 12 octobre 2016
-Description : Affiche maintenant ‡ l'Èchelle et EstEnCollision a ÈtÈ implantÈ
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -64,7 +62,6 @@ namespace AtelierXNA
             DimensionsImage = CalculerDimensionsImage();
             …chelle = Calculer…chelle();
             DimensionsSprite¿Afficher = CalculerDimensionsSprite¿Afficher();
-            //Origine = new Vector2(ABSCISSE_NULLE, ORDONN…E_NULLE);
             CalculerRectangleImage¿Afficher();
             RectangleSource = CalculerRectangleSource();
             CalculerMarges();
@@ -156,10 +153,8 @@ namespace AtelierXNA
         /// MÈthode qui dessine le Sprite ‡ l'Ècran
         /// </summary>
         /// <param name="gameTime">Contient les informations sur le temps de jeu</param>
-        public override void Draw(GameTime gameTime)
+        public override sealed void Draw(GameTime gameTime)
         {
-            //GestionSprites.Draw(Image, Position, ZoneAffichage, Color.White, AUCUNE_ROTATION, Origine, …chelle, SpriteEffects.None, AUCUNE_COUCHE_DE_PROFONDEUR);
-
             GestionSprites.Draw(Image, RectangleImage¿Afficher, RectangleSource, Color.White);
         }
 

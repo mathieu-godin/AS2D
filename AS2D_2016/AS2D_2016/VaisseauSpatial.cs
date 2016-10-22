@@ -4,8 +4,7 @@
    Description :       Ce component, enfant de SpriteAnimé, permet
                        de gérer le vaisseau spatial.*/
 
-// Modification : Modifications pour la descente du vaisceau au début
-//                Mathieu Godin
+// Co-auteur : Mathieu Godin
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -13,35 +12,24 @@ using Microsoft.Xna.Framework.Input;
 namespace AtelierXNA
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// Ce component, enfant de SpriteAnimé, permet de gérer le vaisseau spatial
     /// </summary>
     public class VaisseauSpatial : SpriteAnimé
     {
-        //Constante
-        const int NE_SE_DÉPLACE_PAS = 0,
-                  SE_DÉPLACE = 1,
-                  NB_PIXELS_DE_DÉPLACEMENT = 4, // Je l'ai changé de 5 à 4 car ça ressemblait plus à l'exemple d'exécution
-                  NB_DE_MISSILES_MAX = 3,
-                  HAUTEUR_MISSILE_MAX = 40,
-                  NB_DE_MISSILE_DANSLIMAGE = 25;
+        const int NE_SE_DÉPLACE_PAS = 0, SE_DÉPLACE = 1, NB_PIXELS_DE_DÉPLACEMENT = 4, NB_DE_MISSILES_MAX = 3, HAUTEUR_MISSILE_MAX = 40, NB_DE_MISSILE_DANSLIMAGE = 25, ANIMATION_DE_BASE = 0, DEMI_LARGEUR_CANON_VAISSEAU = 4, UNITÉ_ANIMATION = 1, LARGEUR_ANIMATION = 5, HAUTEUR_ANIMATION = 4;
+        const string CHAÎNE_IMAGE_MISSILE = "Missile", CHAÎNE_IMAGE_EXPLOSION = "Explosion";
+        const float INTERVALLE_ANIMATION_RAPIDE = 1.5f * Atelier.INTERVALLE_STANDARDS;
 
-
-        //Propriété initialement gérée par le constructeur
         float IntervalleMAJDéplacement { get; set; }
-
-        //Propriété initialement gérée par Initialize
         float TempsÉcouléDepuisMAJ { get; set; }
         int AnimationSelonLeDéplacement { get; set; }
         Vector2 AnciennePosition { get; set; }
-        // Ajouté par Mathieu Godin pour la descente du vaisseau
         int OrdonnéeFinaleVaisseau { get; set; }
         bool EnDescente { get; set; }
-        Vector2 VecteurDéplacementDescente { get; set; } // D'autres similaires pourraient être utilisés dans le reste de la classe pour optimiser
+        Vector2 VecteurDéplacementDescente { get; set; }
         Vector2 DéplacementRésultant { get; set; }
-
-        //Propriété initialement gérée par LoadContent
         InputManager GestionInput { get; set; }
-
+        Vector2 PositionSupplémentaireMissile { get; set; }
 
         /// <summary>
         /// Constructeur de VaisseauSpatial
@@ -53,12 +41,7 @@ namespace AtelierXNA
         /// <param name="descriptionImage">Description de l'image (Vector2)</param>
         /// <param name="intervalleMAJAnimation">Intervalle de mise à jour de l'animation (float)</param>
         /// <param name="intervalleMAJDéplacement">Intervalle de mise à jour du déplacement (float)</param>
-        public VaisseauSpatial(Game jeu, string nomImage,
-                               Vector2 position, Rectangle zoneAffichage,
-                               Vector2 descriptionImage, float intervalleMAJAnimation,
-                               float intervalleMAJDéplacement)
-            : base(jeu, nomImage, position, zoneAffichage,
-                  descriptionImage, intervalleMAJAnimation)
+        public VaisseauSpatial(Game jeu, string nomImage, Vector2 position, Rectangle zoneAffichage, Vector2 descriptionImage, float intervalleMAJAnimation, float intervalleMAJDéplacement) : base(jeu, nomImage, position, zoneAffichage, descriptionImage, intervalleMAJAnimation)
         {
             IntervalleMAJDéplacement = intervalleMAJDéplacement;
         }
@@ -69,15 +52,15 @@ namespace AtelierXNA
         public override void Initialize()
         {
             base.Initialize();
-            TempsÉcouléDepuisMAJ = 0;
-            AnimationSelonLeDéplacement = 0;
-            //À effacer avec la descente du vaisseau maintenant : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
-            Position = new Vector2(Position.X - DimensionsSpriteÀAfficher.X / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - DimensionsSpriteÀAfficher.Y / DIVISEUR_OBTENTION_DEMI_GRANDEUR); // Nouvelle ligne
+            TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
+            AnimationSelonLeDéplacement = ANIMATION_DE_BASE; 
+            Position = new Vector2(Position.X - DimensionsSpriteÀAfficher.X / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y - DimensionsSpriteÀAfficher.Y / DIVISEUR_OBTENTION_DEMI_GRANDEUR);
             AnciennePosition = new Vector2(Position.X, Position.Y);
             OrdonnéeFinaleVaisseau = Game.Window.ClientBounds.Height - (int)DimensionsSpriteÀAfficher.Y; 
             EnDescente = true;
             VecteurDéplacementDescente = new Vector2(AUCUN_DÉPLACEMENT, NB_PIXELS_DE_DÉPLACEMENT);
             DéplacementRésultant = Position - AnciennePosition;
+            PositionSupplémentaireMissile = new Vector2(DimensionsSpriteÀAfficher.X / DIVISEUR_OBTENTION_DEMI_GRANDEUR - DEMI_LARGEUR_CANON_VAISSEAU, DimensionsSpriteÀAfficher.Y / DEMI_LARGEUR_CANON_VAISSEAU);
         }
 
         /// <summary>
@@ -104,17 +87,32 @@ namespace AtelierXNA
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            
-            if (GestionInput.EstNouvelleTouche(Keys.Space))
-                LancerMissile();
+            VérifierLancementMissile();
+            MettreÀJourVaisseau(gameTime);
+        }
 
-            float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            TempsÉcouléDepuisMAJ += TempsÉcoulé;
+        /// <summary>
+        /// Vérifie si la touche Espace a été appuyée afin de lancer un missile si c'est le cas
+        /// </summary>
+        void VérifierLancementMissile()
+        {
+            if (GestionInput.EstNouvelleTouche(Keys.Space))
+            {
+                LancerMissile();
+            }
+        }
+
+        /// <summary>
+        /// Gère la structure de temps du vaisseau
+        /// </summary>
+        void MettreÀJourVaisseau(GameTime gameTime)
+        {
+            TempsÉcouléDepuisMAJ += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJ >= IntervalleMAJDéplacement)
             {
+                TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
                 DéterminerSiVaisseauEnDescente();
                 EffectuerMiseÀJourDéplacement();
-                TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
             }
         }
 
@@ -125,7 +123,7 @@ namespace AtelierXNA
         {
             if (EnDescente)
             {
-                GérerDescenteDuVaisseau(); // Nouvelle méthode
+                GérerDescenteDuVaisseau();
             }
         }
 
@@ -174,7 +172,7 @@ namespace AtelierXNA
         /// <returns>Nombre de pixels de déplacement ou zéro</returns>
         int GérerTouche(Keys touche)
         {
-            return GestionInput.EstEnfoncée(touche) ? NB_PIXELS_DE_DÉPLACEMENT : 0;
+            return GestionInput.EstEnfoncée(touche) ? NB_PIXELS_DE_DÉPLACEMENT : AUCUN_DÉPLACEMENT;
         }
 
         /// <summary>
@@ -183,9 +181,9 @@ namespace AtelierXNA
         /// <param name="déplacementHorizontal">Déplacement horizontal</param>
         void AjusterPosition(int déplacementHorizontal)
         {
-            float posX = CalculerPosition(déplacementHorizontal, Position.X, MargeGauche, MargeDroite);
+            float abscisse = CalculerPosition(déplacementHorizontal, Position.X, MargeGauche, MargeDroite);
 
-            Position = new Vector2(posX, Position.Y);
+            Position = new Vector2(abscisse, Position.Y);
         }
 
         /// <summary>
@@ -220,17 +218,9 @@ namespace AtelierXNA
 
             if (nbreDeMissiles < NB_DE_MISSILES_MAX)
             {
-                Missile missile = new Missile(Game, "Missile",
-                                                new Vector2(Position.X + DimensionsSpriteÀAfficher.X / DIVISEUR_OBTENTION_DEMI_GRANDEUR - 4, Position.Y - DimensionsSpriteÀAfficher.Y / 4),
-                                                new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, HAUTEUR_MISSILE_MAX, HAUTEUR_MISSILE_MAX),
-                                                new Vector2(NB_DE_MISSILE_DANSLIMAGE, 1),
-                                                "Explosion",
-                                                new Vector2(5, 4),
-                                                1.5f * Atelier.INTERVALLE_STANDARDS,
-                                                Atelier.INTERVALLE_STANDARDS);
+                Missile missile = new Missile(Game, CHAÎNE_IMAGE_MISSILE, new Vector2(Position.X + PositionSupplémentaireMissile.X, Position.Y - PositionSupplémentaireMissile.Y), new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, HAUTEUR_MISSILE_MAX, HAUTEUR_MISSILE_MAX), new Vector2(NB_DE_MISSILE_DANSLIMAGE, UNITÉ_ANIMATION), CHAÎNE_IMAGE_EXPLOSION, new Vector2(LARGEUR_ANIMATION, HAUTEUR_ANIMATION), INTERVALLE_ANIMATION_RAPIDE, Atelier.INTERVALLE_STANDARDS);
                 Game.Components.Add(missile);
             }
         }
-
     }
 }

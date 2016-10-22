@@ -8,13 +8,9 @@ Rôle : Composant qui affiche un texte centré
        à l'écran à la fin de la partie
 
 Créé : 5 octobre 2016
-Modifié : 11 octobre 2016
-Description : Presque tout le code rendant le tout
-              fonctionnel a été écrit
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace AtelierXNA
 {
@@ -68,7 +64,7 @@ namespace AtelierXNA
             Échelle = CalculerÉchelle();
             InitialiserOrigine();
             PositionCentrée = new Vector2(Game.Window.ClientBounds.Width / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Game.Window.ClientBounds.Height / DIVISEUR_OBTENTION_DEMI_GRANDEUR);
-            this.Enabled = false;
+            Enabled = false;
         }
 
         /// <summary>

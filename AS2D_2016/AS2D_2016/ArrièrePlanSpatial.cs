@@ -1,18 +1,17 @@
-﻿/* Auteur :            Raphaël Brulé
-   Fichier :           ArrièrePlanSpatial.cs
-   Date :              le 5 octobre 2016
-   Description :       Ce DrawableGameComponent permet à l'arrière-plan
-                       de se déplacer du haut vers le bas, et ce, à répétition.*/
+﻿/*
+ArrièrePlanSpatial.cs
+---------------------
 
- 
-// Co-Auteur : Mathieu Godin
-// Modification majeure : 11 octobre 2016
-//Description : L'entiereté du code a été modifiée afin de rendre l'arrière-plan
-//              fonctionnel et pas écrasé
+Par Mathieu Godin
 
+Rôle : Composant qui un arrière-plan
+       déroulant de haut en bas de
+       ciel étoilé
+Créé : 5 octobre 2016
+Co-auteur : Raphaël Brûlé
+*/
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace AtelierXNA
 {

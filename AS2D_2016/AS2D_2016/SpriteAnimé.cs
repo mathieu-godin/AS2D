@@ -10,8 +10,6 @@ Rôle : Composant qui hérite de Sprite et qui
        dans la même image chargée
 
 Créé : 5 octobre 2016
-Modifié : 12 octobre 2016
-Description : Très grandes modifications pour EstEnCollision pour faire ÀDétruire et autres
 */
 using Microsoft.Xna.Framework;
 
@@ -22,21 +20,16 @@ namespace AtelierXNA
     /// </summary>
     public class SpriteAnimé : Sprite, IDestructible
     {
-        //Constantes
         protected const int AUCUN_TEMPS_ÉCOULÉ = 0, AUCUN_DÉPLACEMENT = 0;
 
-        //Propriétés initialement gérées par le constructeur
         Vector2 DescriptionImage { get; set; }
-        protected float IntervalleMAJAnnimation { get; set; }
-
-        //Propriétés initialement gérées par Initialize
-        public bool ADétruire { get; set; }
         float TempsÉcouléDepuisMAJAnimation { get; set; }
-        //int Rangé { get; set; }
-        //int VariableÀChangerDeNom { get; set; }
-        protected Vector2 Delta { get; set; }
         int ÉtalementAnimationsAbscisses { get; set; }
         int ÉtalementAnimationsOrdonnées { get; set; }
+        float IntervalleMAJAnnimation { get; set; }
+        protected Vector2 Delta { get; private set; }
+        public bool ADétruire { get; set; }
+
 
         /// <summary>
         /// Constructeur de la classe SpriteAnimé
@@ -119,8 +112,8 @@ namespace AtelierXNA
             TempsÉcouléDepuisMAJAnimation += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJAnimation >= IntervalleMAJAnnimation)
             {
-                EffectuerMiseÀJourAnimation();
                 TempsÉcouléDepuisMAJAnimation = AUCUN_TEMPS_ÉCOULÉ;
+                EffectuerMiseÀJourAnimation();
             }
         }
     }

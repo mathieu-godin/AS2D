@@ -7,7 +7,6 @@ namespace AtelierXNA
 {
     interface IDestructible
     {
-        //À implanter
         bool ADétruire { get; }
     }
 }

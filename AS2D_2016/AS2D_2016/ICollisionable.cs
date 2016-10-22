@@ -7,7 +7,6 @@ namespace AtelierXNA
 {
     interface ICollisionable
     {
-        //À implanter
         bool EstEnCollision(object autreObjet);
     }
 }

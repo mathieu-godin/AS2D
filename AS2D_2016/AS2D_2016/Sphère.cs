@@ -9,7 +9,7 @@ Rôle : Composant qui hérite de SpriteAnimé et qui
        murs de l'écran
 
 Créé : 12 octobre 2016
-Modifié : 15 octobre 2016
+Co-auteur : Raphaël Brûlé
 */
 using System;
 using Microsoft.Xna.Framework;
@@ -50,7 +50,6 @@ namespace AtelierXNA
         {
             LoadContent();
             base.Initialize();
-            /* Peut-être +1 au générateur car exclu*/
             Position = new Vector2(GénérateurAléatoire.Next(ABSCISSE_NULLE, MargeDroite), GénérateurAléatoire.Next(ORDONNÉE_NULLE, MargeBas / DIVISEUR_OBTENTION_DEMI_GRANDEUR));
             AngleDéplacement = GénérateurAléatoire.Next(FACTEUR_MINIMAL_CERCLE_360_DEGRÉS, FACTEUR_MAXIMAL_CERCLE_360_DEGRÉS_EXCLU) * ANGLE_DROIT + GénérateurAléatoire.Next(ANGLE_DÉPLACEMENT_DÉPART_MINIMAL, ANGLE_DÉPLACEMENT_DÉPART_MAXIMAL);
             VecteurDéplacementMAJ = new Vector2(NORME_VECTEUR_DÉPLACEMENT * (float)Math.Cos(MathHelper.ToRadians(AngleDéplacement)), NORME_VECTEUR_DÉPLACEMENT * (float)Math.Sin(MathHelper.ToRadians(AngleDéplacement)));
@@ -76,24 +75,40 @@ namespace AtelierXNA
             TempsÉcouléDepuisMAJDéplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TempsÉcouléDepuisMAJDéplacement >= IntervalleMAJDéplacement)
             {
-                EffectuerMiseÀJourDéplacement();
                 TempsÉcouléDepuisMAJDéplacement = AUCUN_TEMPS_ÉCOULÉ;
+                EffectuerMiseÀJourDéplacement();
             }
         }
 
         /// <summary>
         /// Méthode qui met à jour le déplacement de la sphère selon le temps écoulé
         /// </summary>
-        protected virtual void EffectuerMiseÀJourDéplacement()
+        void EffectuerMiseÀJourDéplacement()
         {
             Position += VecteurDéplacementMAJ;
             CalculerRectangleImageÀAfficher();
+            VérifierRebondissementMurs();
+            VérifierRebondissementPlafondPlancher();
+        }
+
+        /// <summary>
+        /// Vérifie si la balle rebondit sur les murs sur les côtés de la fenêtre
+        /// </summary>
+        void VérifierRebondissementMurs()
+        {
             if (Position.X <= MargeGauche || Position.X >= MargeDroite)
             {
                 AngleDéplacement = ANGLE_PLAT - AngleDéplacement;
                 VecteurDéplacementMAJ = new Vector2(NORME_VECTEUR_DÉPLACEMENT * (float)Math.Cos(MathHelper.ToRadians(AngleDéplacement)), NORME_VECTEUR_DÉPLACEMENT * (float)Math.Sin(MathHelper.ToRadians(AngleDéplacement)));
             }
-            else if (Position.Y >= MargeBas || Position.Y <= MargeHaut)
+        }
+
+        /// <summary>
+        /// Vérifie si la balle rebondit sur le plancher ou le plafond de la fenêtre
+        /// </summary>
+        void VérifierRebondissementPlafondPlancher()
+        {
+            if (Position.Y >= MargeBas || Position.Y <= MargeHaut)
             {
                 AngleDéplacement = ANGLE_PLEIN - AngleDéplacement;
                 VecteurDéplacementMAJ = new Vector2(NORME_VECTEUR_DÉPLACEMENT * (float)Math.Cos(MathHelper.ToRadians(AngleDéplacement)), NORME_VECTEUR_DÉPLACEMENT * (float)Math.Sin(MathHelper.ToRadians(AngleDéplacement)));
