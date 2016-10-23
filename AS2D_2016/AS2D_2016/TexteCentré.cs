@@ -72,7 +72,7 @@ namespace AtelierXNA
         /// </summary>
         protected override void LoadContent()
         {
-            Font = Game.Content.Load<SpriteFont>("Fonts/" + NomFont);
+            Font = (Game.Services.GetService(typeof(RessourcesManager<SpriteFont>)) as RessourcesManager<SpriteFont>).Find(NomFont);
             GestionSprites = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
         }
 

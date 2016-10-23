@@ -34,7 +34,6 @@ namespace AtelierXNA
         Vector2 VecteurIncrément { get; set; }
         Vector2 PositionPremierFond { get; set; }
         Vector2 PositionDeuxièmeFond { get; set; }
-        Vector2 OrigineNulle { get; set; }
         SpriteBatch GestionSprites { get; set; }
         string NomImage { get; set; }
         Texture2D ImageDeFond { get; set; }
@@ -56,10 +55,9 @@ namespace AtelierXNA
         /// </summary>
         public override void Initialize()
         {
-            TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
-            OrigineNulle = new Vector2(ABSCISSE_NULLE, ORDONNÉE_NULLE);
-            VecteurIncrément = new Vector2(ABSCISSE_NULLE, INCRÉMENT_ORDONNÉE);
             base.Initialize();
+            TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
+            VecteurIncrément = new Vector2(ABSCISSE_NULLE, INCRÉMENT_ORDONNÉE);
             HauteurImageMiseÀLÉchelle = ImageDeFond.Height * ÉCHELLE;
             ReplacerFonds();
         }
@@ -78,8 +76,8 @@ namespace AtelierXNA
         /// </summary>
         protected override void LoadContent()
         {
+            ImageDeFond = (Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>).Find(NomImage);
             GestionSprites = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
-            ImageDeFond = Game.Content.Load<Texture2D>("Textures/" + NomImage);
         }
 
         /// <summary>
@@ -89,14 +87,6 @@ namespace AtelierXNA
         public override void Update(GameTime gameTime)
         {
             TempsÉcouléDepuisMAJ += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            VérifierSiIncrémentationNécessaire();
-        }
-
-        /// <summary>
-        /// Vérifie en fonction de l'intervalle de mise à jour si assez de temps s'est écoulé pour aller incrémenter et peut-être même inverser, si nécessaire, les deux arrières-plans semblables servant d'illusion au défilement
-        /// </summary>
-        void VérifierSiIncrémentationNécessaire()
-        {
             if (TempsÉcouléDepuisMAJ >= IntervalleMAJ)
             {
                 TempsÉcouléDepuisMAJ = AUCUN_TEMPS_ÉCOULÉ;
@@ -123,8 +113,8 @@ namespace AtelierXNA
         /// <param name="gameTime">Informations sur le temps de jeu de type GameTime</param>
         public override void Draw(GameTime gameTime)
         {
-            GestionSprites.Draw(ImageDeFond, PositionPremierFond, null, Color.White, AUCUN_ANGLE, OrigineNulle, ÉCHELLE, SpriteEffects.None, AUCUNE_ÉPAISSEUR_DE_COUCHE);
-            GestionSprites.Draw(ImageDeFond, PositionDeuxièmeFond, null, Color.White, AUCUN_ANGLE, OrigineNulle, ÉCHELLE, SpriteEffects.None, AUCUNE_ÉPAISSEUR_DE_COUCHE);
+            GestionSprites.Draw(ImageDeFond, PositionPremierFond, null, Color.White, AUCUN_ANGLE, Vector2.Zero, ÉCHELLE, SpriteEffects.None, AUCUNE_ÉPAISSEUR_DE_COUCHE);
+            GestionSprites.Draw(ImageDeFond, PositionDeuxièmeFond, null, Color.White, AUCUN_ANGLE, Vector2.Zero, ÉCHELLE, SpriteEffects.None, AUCUNE_ÉPAISSEUR_DE_COUCHE);
         }
     }
 }

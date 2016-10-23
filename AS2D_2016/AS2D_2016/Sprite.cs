@@ -9,10 +9,10 @@ Rôle : Composant qui est un DrawableGameComponent et
        un sprite à l'écran par le biais d'un Texture2D
 
 Créé : 5 octobre 2016
+Co-auteur : Raphaël Brûlé
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace AtelierXNA
 {
@@ -24,15 +24,14 @@ namespace AtelierXNA
         protected const int ORDONNÉE_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
 
         SpriteBatch GestionSprites { get; set; }
-        RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         string NomImage { get; set; }
         Texture2D Image { get; set; }
         float Échelle { get; set; }
         Rectangle RectangleImageÀAfficher { get; set; }
-        protected int MargeDroite { get; set; }
-        protected int MargeBas { get; set; }
-        protected int MargeGauche { get; set; }
-        protected int MargeHaut { get; set; }
+        protected int MargeDroite { get; private set; }
+        protected int MargeBas { get; private set; }
+        protected int MargeGauche { get; private set; }
+        protected int MargeHaut { get; private set; }
         protected Rectangle ZoneAffichage { get; private set; }
         protected Vector2 DimensionsSpriteÀAfficher { get; private set; }
         protected Vector2 DimensionsImage { get; private set; }
@@ -145,8 +144,7 @@ namespace AtelierXNA
         protected override void LoadContent()
         {
             GestionSprites = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
-            GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
-            Image = GestionnaireDeTextures.Find(NomImage);
+            Image = (Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>).Find(NomImage);
         }
 
         /// <summary>

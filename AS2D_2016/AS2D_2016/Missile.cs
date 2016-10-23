@@ -14,7 +14,6 @@ Co-auteur : Raphaël Brûlé
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace AtelierXNA
 {
     /// <summary>
