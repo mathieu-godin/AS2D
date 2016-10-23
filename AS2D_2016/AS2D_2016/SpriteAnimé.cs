@@ -26,7 +26,7 @@ namespace AtelierXNA
         float TempsÉcouléDepuisMAJAnimation { get; set; }
         int ÉtalementAnimationsAbscisses { get; set; }
         int ÉtalementAnimationsOrdonnées { get; set; }
-        float IntervalleMAJAnnimation { get; set; }
+        protected float IntervalleMAJAnnimation { get; private set; }
         protected Vector2 Delta { get; private set; }
         public bool ADétruire { get; set; }
 

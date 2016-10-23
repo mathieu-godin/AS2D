@@ -16,9 +16,9 @@ namespace AtelierXNA
     /// </summary>
     public class VaisseauSpatial : SpriteAnimé
     {
-        const int NE_SE_DÉPLACE_PAS = 0, SE_DÉPLACE = 1, NB_PIXELS_DE_DÉPLACEMENT = 4, NB_DE_MISSILES_MAX = 3, HAUTEUR_MISSILE_MAX = 40, NB_DE_MISSILE_DANSLIMAGE = 25, ANIMATION_DE_BASE = 0, DEMI_LARGEUR_CANON_VAISSEAU = 4, UNITÉ_ANIMATION = 1, LARGEUR_ANIMATION = 5, HAUTEUR_ANIMATION = 4;
+        const int NE_SE_DÉPLACE_PAS = 0, SE_DÉPLACE = 1, NB_PIXELS_DE_DÉPLACEMENT = 4, NB_DE_MISSILES_MAX = 3, HAUTEUR_MISSILE_MAX = 40, NB_DE_MISSILE_DANSLIMAGE = 25, ANIMATION_DE_BASE = 0, DEMI_LARGEUR_CANON_VAISSEAU = 4, UNITÉ_ANIMATION = 1, LARGEUR_ANIMATION = 5, HAUTEUR_ANIMATION = 4, AUCUNE_ACCÉLÉRATION = 0;
         const string CHAÎNE_IMAGE_MISSILE = "Missile", CHAÎNE_IMAGE_EXPLOSION = "Explosion";
-        const float INTERVALLE_ANIMATION_RAPIDE = 1.5f * Atelier.INTERVALLE_STANDARDS;
+        const float FACTEUR_ACCÉLÉRATION = 1f / 600F, INTERVALLE_MIN = 0.01F, INTERVALLE_MAX = 1;
 
         float IntervalleMAJDéplacement { get; set; }
         float TempsÉcouléDepuisMAJ { get; set; }
@@ -161,7 +161,30 @@ namespace AtelierXNA
             if (GestionInput.EstClavierActivé)
             {
                 int déplacementHorizontal = GérerTouche(Keys.D) - GérerTouche(Keys.A);
+                GérerAccélération();
+                VérifierSiAjustementPositionNécessaire(déplacementHorizontal);
+            }
+        }
+
+        /// <summary>
+        /// Vérifie si on a bougé et si on doit ainsi ajuster la Position du VaisseauSpatial
+        /// </summary>
+        /// <param name="déplacementHorizontal">Déplacement horizontal effectué par le VaisseauSpatial</param>
+        void VérifierSiAjustementPositionNécessaire(int déplacementHorizontal)
+        {
+            if (déplacementHorizontal != AUCUN_DÉPLACEMENT)
+            {
                 AjusterPosition(déplacementHorizontal);
+            }
+        }
+
+        void GérerAccélération()
+        {
+            int modificateurAccélération = GérerTouche(Keys.PageDown) - GérerTouche(Keys.PageUp);
+            if (modificateurAccélération != AUCUNE_ACCÉLÉRATION)
+            {
+                IntervalleMAJDéplacement += modificateurAccélération * FACTEUR_ACCÉLÉRATION;
+                IntervalleMAJDéplacement = MathHelper.Max(MathHelper.Min(IntervalleMAJDéplacement, INTERVALLE_MAX), INTERVALLE_MIN);
             }
         }
 
@@ -218,7 +241,7 @@ namespace AtelierXNA
 
             if (nbreDeMissiles < NB_DE_MISSILES_MAX)
             {
-                Missile missile = new Missile(Game, CHAÎNE_IMAGE_MISSILE, new Vector2(Position.X + PositionSupplémentaireMissile.X, Position.Y - PositionSupplémentaireMissile.Y), new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, HAUTEUR_MISSILE_MAX, HAUTEUR_MISSILE_MAX), new Vector2(NB_DE_MISSILE_DANSLIMAGE, UNITÉ_ANIMATION), CHAÎNE_IMAGE_EXPLOSION, new Vector2(LARGEUR_ANIMATION, HAUTEUR_ANIMATION), INTERVALLE_ANIMATION_RAPIDE, Atelier.INTERVALLE_STANDARDS);
+                Missile missile = new Missile(Game, CHAÎNE_IMAGE_MISSILE, new Vector2(Position.X + PositionSupplémentaireMissile.X, Position.Y - PositionSupplémentaireMissile.Y), new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, HAUTEUR_MISSILE_MAX, HAUTEUR_MISSILE_MAX), new Vector2(NB_DE_MISSILE_DANSLIMAGE, UNITÉ_ANIMATION), CHAÎNE_IMAGE_EXPLOSION, new Vector2(LARGEUR_ANIMATION, HAUTEUR_ANIMATION), IntervalleMAJAnnimation, IntervalleMAJDéplacement);
                 Game.Components.Add(missile);
             }
         }
