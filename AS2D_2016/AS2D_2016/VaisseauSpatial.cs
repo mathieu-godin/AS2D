@@ -73,12 +73,11 @@ namespace AtelierXNA
         }
 
         /// <summary>
-        /// Crée le rectangle représentant le pourtour de ce qui est sélectionné dans l'image originale
+        /// Méthode qui met à jour le SpriteAnimé selon le temps écoulé
         /// </summary>
-        /// <returns>Un rectangle de type Rectangle</returns>
-        protected new Rectangle CréerRectangleSource()
+        protected override void EffectuerMiseÀJourAnimation()
         {
-            return new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, (int)Delta.Y * AnimationSelonLeDéplacement, (int)Delta.X, (int)Delta.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, (int)Delta.Y * AnimationSelonLeDéplacement, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>

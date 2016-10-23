@@ -116,11 +116,11 @@ namespace AtelierXNA
         /// <param name="gameTime">Contient les informations de temps de jeu</param>
         void Mettre¿JourMissile(GameTime gameTime)
         {
+            base.Update(gameTime);
             Temps…coulÈDepuisMAJDÈplacement += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (Temps…coulÈDepuisMAJDÈplacement >= IntervalleMAJDÈplacement)
             {
                 Temps…coulÈDepuisMAJDÈplacement = AUCUN_TEMPS_…COUL…;
-                base.Update(gameTime);
                 EffectuerMise¿JourDÈplacement();
             }
         }

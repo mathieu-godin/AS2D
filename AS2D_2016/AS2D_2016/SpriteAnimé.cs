@@ -40,8 +40,7 @@ namespace AtelierXNA
         /// <param name="zoneAffichage">Zone d'affichage du sprite</param>
         /// <param name="descriptionImage">Le nombres de sprites en x et en y contenus dans l'image chargée</param>
         /// <param name="intervalleMAJAnimation">Intervalle de mise à jour de l'animation du sprite</param>
-        public SpriteAnimé(Game game, string nomImage, Vector2 position, Rectangle zoneAffichage, Vector2 descriptionImage, float intervalleMAJAnimation) 
-            : base(game, nomImage, position, zoneAffichage)
+        public SpriteAnimé(Game game, string nomImage, Vector2 position, Rectangle zoneAffichage, Vector2 descriptionImage, float intervalleMAJAnimation) : base(game, nomImage, position, zoneAffichage)
         {
             DescriptionImage = new Vector2(descriptionImage.X, descriptionImage.Y);
             IntervalleMAJAnnimation = intervalleMAJAnimation;
@@ -71,6 +70,15 @@ namespace AtelierXNA
         }
 
         /// <summary>
+        /// Calcule rectangle couvrant ce qui sera affiché
+        /// </summary>
+        /// <returns>Le rectangle source de type Rectangle</returns>
+        protected override Rectangle CalculerRectangleSource()
+        {
+            return new Rectangle(ABSCISSE_NULLE, ORDONNÉE_NULLE, (int)Delta.X, (int)Delta.Y);
+        }
+
+        /// <summary>
         /// Calcule l'échelle horizontale du sprite pour la méthode Draw()
         /// </summary>
         protected override float CalculerÉchelleHorizontale()
@@ -91,16 +99,7 @@ namespace AtelierXNA
         /// </summary>
         protected virtual void EffectuerMiseÀJourAnimation()
         {
-            CalculerRectangleSource();
-        }
-
-        /// <summary>
-        /// Crée le rectangle représentant le pourtour de ce qui est sélectionné dans l'image originale
-        /// </summary>
-        /// <returns>Un rectangle de type Rectangle</returns>
-        protected new Rectangle CréerRectangleSource()
-        {
-            return new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, RectangleSource.X >= ÉtalementAnimationsAbscisses ? (RectangleSource.Y >= ÉtalementAnimationsOrdonnées ? ORDONNÉE_NULLE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
+            RectangleSource = new Rectangle((RectangleSource.X + (int)Delta.X) % (int)DimensionsImage.X, RectangleSource.X >= ÉtalementAnimationsAbscisses ? (RectangleSource.Y >= ÉtalementAnimationsOrdonnées ? ORDONNÉE_NULLE : RectangleSource.Y + (int)Delta.Y) : RectangleSource.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>

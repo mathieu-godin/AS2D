@@ -23,18 +23,20 @@ namespace AtelierXNA
     {
         protected const int ORDONN…E_NULLE = 0, ABSCISSE_NULLE = 0, HAUTEUR_NULLE = 0, LARGEUR_NULLE = 0, DIVISEUR_OBTENTION_DEMI_GRANDEUR = 2;
 
+        SpriteBatch GestionSprites { get; set; }
+        RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         string NomImage { get; set; }
         Texture2D Image { get; set; }
         float …chelle { get; set; }
-        string NomImage { get; set; }
         Rectangle RectangleImage¿Afficher { get; set; }
         protected int MargeDroite { get; set; }
         protected int MargeBas { get; set; }
         protected int MargeGauche { get; set; }
         protected int MargeHaut { get; set; }
+        protected Rectangle ZoneAffichage { get; private set; }
         protected Vector2 DimensionsSprite¿Afficher { get; private set; }
         protected Vector2 DimensionsImage { get; private set; }
-        protected Rectangle RectangleSource { get; private set; }
+        protected Rectangle RectangleSource { get; set; }
         public Vector2 Position { get; protected set; }
 
         /// <summary>
