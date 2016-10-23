@@ -22,7 +22,7 @@ namespace AtelierXNA
     /// </summary>
     public class Missile : SpriteAnimé
     {
-        const float INTERVALLE_ANIMATION_LENT = 6 * Atelier.INTERVALLE_STANDARDS, CHANGEMENT_INTERVALLE_POUR_ACCÉLÉRATION = 1 / 4000F, DÉPLACEMENT_ORDONNÉE_MAJ = 4.0F;
+        const float INTERVALLE_ANIMATION_LENT = 6 * Atelier.INTERVALLE_STANDARDS, CHANGEMENT_INTERVALLE_POUR_ACCÉLÉRATION = 0.00015F, DÉPLACEMENT_ORDONNÉE_MAJ = 4.0F;
         const int AVANT_PREMIÈRE_PHASE_EXPLOSION = 0, DIMENSION_EXPLOSION = 40;
         const string CHAÎNE_IMAGE_EXPLOSION = "Explosion";
         
