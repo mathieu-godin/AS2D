@@ -164,7 +164,7 @@ namespace AtelierXNA
         public void ActiverExplosion()
         {
             Visible = false;
-            Explosion = new SpriteAnimé(Game, CHAÎNE_IMAGE_EXPLOSION, Position, ZoneExplosion, DescriptionImageExplosion, INTERVALLE_ANIMATION_LENT);
+            Explosion = new SpriteAnimé(Game, CHAÎNE_IMAGE_EXPLOSION, new Vector2(Position.X - DIMENSION_EXPLOSION / DIVISEUR_OBTENTION_DEMI_GRANDEUR + DimensionsSpriteÀAfficher.X / DIVISEUR_OBTENTION_DEMI_GRANDEUR, Position.Y), ZoneExplosion, DescriptionImageExplosion, INTERVALLE_ANIMATION_LENT);
             ExplosionActivée = true;
             PhaseExplosion = AVANT_PREMIÈRE_PHASE_EXPLOSION;
             Collision = true;
